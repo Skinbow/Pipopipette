@@ -1,6 +1,6 @@
 "globals" : {
-  "window" : true,
-  "document" : true,
-  "setInterval" : true,
-  "Image" : true
+  "window",
+  "document",
+  "Image",
+  "setInterval"
 }

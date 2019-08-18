@@ -24,13 +24,14 @@ stickTextures = {
     var orientation,
       key,
       tempImg;
-    for (orientation in this) {
-      if (this.hasOwnProperty(orientation)) {
-        for (key in this[orientation]) {
-          if (this[orientation].hasOwnProperty(key)) {
+    
+    for (orientation in stickTextures) {
+      if (stickTextures.hasOwnProperty(orientation)) {
+        for (key in stickTextures[orientation]) {
+          if (stickTextures[orientation].hasOwnProperty(key)) {
             tempImg = new Image();
-            tempImg.src = this[orientation][key];
-            this[orientation][key] = tempImg;
+            tempImg.src = stickTextures[orientation][key];
+            stickTextures[orientation][key] = tempImg;
           }
         }
       }
@@ -39,19 +40,20 @@ stickTextures = {
 };
 
 wallTextures = {
-  "top" : "",
-  "left" : "",
-  "bottom" : "/Assets/WallBottom.png",
-  "right" : "",
+  "top" : "Assets/WallTop.png",
+  "left" : "Assets/WallLeft.png",
+  "bottom" : "Assets/WallBottom.png",
+  "right" : "Assets/WallRight.png",
   init : function () {
     "use strict";
     var key,
       tempImg;
-    for (key in this) {
-      if (this.hasOwnProperty(key)) {
+    
+    for (key in wallTextures) {
+      if (wallTextures.hasOwnProperty(key)) {
         tempImg = new Image();
-        tempImg.src = this[key];
-        this[key] = tempImg;
+        tempImg.src = wallTextures[key];
+        wallTextures[key] = tempImg;
       }
     }
   }
@@ -75,8 +77,10 @@ myGameArea = {
     
     for (i = 0; i < this.squaresWidth; i += 1) {
       for (j = 0; j < this.squaresHeight + 1; j += 1) {
-        if (j === this.squaresHeight) {
-          this.wallSegments.push(new GameComponent(65 * i + 5, 65 * j, 74, 13, "bottom", "wall segment"));
+        if (j === 0) {
+          this.wallSegments.push(new GameComponent(65 * i, 65 * j, 74, 13, "top", "wall segment"));
+        } else if (j === this.squaresHeight) {
+          this.wallSegments.push(new GameComponent(65 * i, 65 * j - 4, 74, 13, "bottom", "wall segment"));
         } else {
           this.sticks.push(new GameComponent(65 * i + 5, 65 * j, 64, 9, "horizontal", "stick"));
         }
@@ -85,7 +89,13 @@ myGameArea = {
     
     for (i = 0; i < this.squaresWidth + 1; i += 1) {
       for (j = 0; j < this.squaresHeight; j += 1) {
-        this.sticks.push(new GameComponent(65 * i, 65 * j + 5, 9, 64, "vertical", "stick"));
+        if (i === 0) {
+          this.wallSegments.push(new GameComponent(65 * i, 65 * j, 13, 74, "left", "wall segment"));
+        } else if (i === this.squaresWidth) {
+          this.wallSegments.push(new GameComponent(65 * i - 4, 65 * j, 13, 74, "right", "wall segment"));
+        } else {
+          this.sticks.push(new GameComponent(65 * i, 65 * j + 5, 9, 64, "vertical", "stick"));
+        }
       }
     }
     this.interval = setInterval(updateGame, 20);
@@ -168,8 +178,8 @@ mouseLocation = {
 
 startGame = function () {
 	"use strict";
-  stickTextures.init();
   wallTextures.init();
+  stickTextures.init();
   myGameArea.start();
   myGameArea.canvas.addEventListener("mousemove", mouseLocation.changeMousePos);
 };
@@ -181,6 +191,9 @@ updateGame = function () {
   myGameArea.clear();
   for (i = 0; i < myGameArea.sticks.length; i += 1) {
     myGameArea.sticks[i].update(myGameArea.sticks[i].collidesWithPoint(mouseLocation.x, mouseLocation.y));
+  }
+  for (i = 0; i < myGameArea.wallSegments.length; i += 1) {
+    myGameArea.wallSegments[i].update();
   }
 };
 
