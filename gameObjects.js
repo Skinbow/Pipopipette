@@ -7,7 +7,8 @@ var
 //Objects
   myGameArea,
   stickTextures,
-  wallTextures;
+  wallTextures,
+  mouseState;
 
 stickTextures = {
   "vertical" : {
@@ -109,5 +110,26 @@ myGameArea = {
   clear : function () {
     "use strict";
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+};
+
+mouseState = {
+  x : 0,
+  y : 0,
+  mouseReleaseLocation : {
+    x : -1,
+    y : -1
+  },
+  changeMousePos : function (event) {
+    "use strict";
+    var rect = myGameArea.canvas.getBoundingClientRect();
+    mouseState.x = event.clientX - rect.left;
+    mouseState.y = event.clientY - rect.top;
+  },
+  mouseReleased : function (event) {
+    "use strict";
+    var rect = myGameArea.canvas.getBoundingClientRect();
+    mouseState.mouseReleaseLocation.x = event.clientX - rect.left;
+    mouseState.mouseReleaseLocation.y = event.clientY - rect.top;
   }
 };

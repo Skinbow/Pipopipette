@@ -35,9 +35,8 @@ GameComponent = function (x, y, width, height, style, type) {
     
     this.update = function (MouseCollides) {
       ctx = myGameArea.context;
-      if (MouseCollides && mouseState.mouseClicksSinceLastCheck > 0) {
+      if (this.collisionBox.collidesWithPoint(mouseState.mouseReleaseLocation.x, mouseState.mouseReleaseLocation.y)) {
         this.checkIfNeighboursAllowColoration();
-        mouseState.mouseClicksSinceLastCheck = 0;
       }
       
       if (this.orientation === "horizontal") {
@@ -72,7 +71,6 @@ GameComponent = function (x, y, width, height, style, type) {
           this.neighbours.push(myGameArea.wallSegments[i]);
         }
       }
-      console.log(this.neighbours);
     };
     
     this.checkIfNeighboursAllowColoration = function () {
