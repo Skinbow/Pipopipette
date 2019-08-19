@@ -6,7 +6,7 @@ var
 //Constructors
   GameComponent,
 //Functions
-  mouseLocation,
+  mouseState,
   startGame,
   updateGame;
 
@@ -98,6 +98,11 @@ myGameArea = {
         }
       }
     }
+    
+    for (i = 0; i < this.sticks.length; i += 1) {
+      this.sticks[i].findNeighbours();
+    }
+    
     this.interval = setInterval(updateGame, 20);
 	},
   clear : function () {
@@ -115,10 +120,17 @@ GameComponent = function (x, y, width, height, style, type) {
 	this.width = width;
 	this.height = height;
   
+  this.type = type;
+  
   if (type === "stick") {
+    this.active = false;
     this.orientation = style;
     this.update = function (MouseCollides) {
       ctx = myGameArea.context;
+      if (MouseCollides && mouseState.mouseClicksSinceLastChecked > 0) {
+        
+        mouseState.mouseClicksSinceLastChecked = 0;
+      }
       if (this.orientation === "horizontal") {
         if (!MouseCollides) {
           ctx.drawImage(stickTextures.horizontal.IDLE, this.x, this.y, this.width, this.height);
@@ -133,6 +145,22 @@ GameComponent = function (x, y, width, height, style, type) {
         }
       }
     };
+    
+    this.findNeighbours = function () {
+      this.neighbours = [];
+      var i;
+      for (i = 0; i < myGameArea.sticks.length; i += 1) {
+        if (this.collidesWithGameComponent(myGameArea.sticks[i])) {
+          this.neighbours.push(myGameArea.sticks[i]);
+        }
+      }
+      for (i = 0; i < myGameArea.wallSegments.length; i += 1) {
+        if (this.collidesWithGameComponent(myGameArea.wallSegments[i])) {
+          this.neighbours.push(myGameArea.wallSegments[i]);
+        }
+      }
+    };
+    
   } else if (type === "wall segment") {
     this.orientation = style;
     this.update = function () {
@@ -163,16 +191,44 @@ GameComponent = function (x, y, width, height, style, type) {
       return false;
     }
   };
+  
+  this.collidesWithGameComponent = function (otherComponent) {
+    //Checking if any of the other object's corners collide with this object
+    if (this.collidesWithPoint(otherComponent.x, otherComponent.y) ||
+        this.collidesWithPoint(otherComponent.x + otherComponent.width, otherComponent.y) ||
+        this.collidesWithPoint(otherComponent.x, otherComponent.y + otherComponent.height) ||
+        this.collidesWithPoint(otherComponent.x + otherComponent.width, otherComponent.y + otherComponent.height) ||
+    //Checking if any of this object's corners collide with the other object
+        otherComponent.collidesWithPoint(this.x, this.y) ||
+        otherComponent.collidesWithPoint(this.x + this.width, this.y) ||
+        otherComponent.collidesWithPoint(this.x, this.y + this.height) ||
+        otherComponent.collidesWithPoint(this.x + this.width, this.y + this.height)) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 };
 
-mouseLocation = {
+mouseState = {
   x : 0,
   y : 0,
+  mousePressed : false,
+  mouseClicksSinceLastCheck : 0,
   changeMousePos : function (event) {
     "use strict";
     var rect = myGameArea.canvas.getBoundingClientRect();
-    mouseLocation.x = event.clientX - rect.left;
-    mouseLocation.y = event.clientY - rect.top;
+    mouseState.x = event.clientX - rect.left;
+    mouseState.y = event.clientY - rect.top;
+  },
+  changeButtonState : function (event) {
+    "use strict";
+    if (event.type === "mousedown") {
+      mouseState.mousePressed = true;
+    } else if (event.type === "mouseup") {
+      mouseState.mousePressed = false;
+      mouseState.mouseClicksSinceLastCheck += 1;
+    }
   }
 };
 
@@ -181,7 +237,9 @@ startGame = function () {
   wallTextures.init();
   stickTextures.init();
   myGameArea.start();
-  myGameArea.canvas.addEventListener("mousemove", mouseLocation.changeMousePos);
+  myGameArea.canvas.addEventListener("mousemove", mouseState.changeMousePos);
+  myGameArea.canvas.addEventListener("mousedown", mouseState.changeButtonState);
+  myGameArea.canvas.addEventListener("mouseup", mouseState.changeButtonState);
 };
 
 updateGame = function () {
@@ -190,7 +248,7 @@ updateGame = function () {
   
   myGameArea.clear();
   for (i = 0; i < myGameArea.sticks.length; i += 1) {
-    myGameArea.sticks[i].update(myGameArea.sticks[i].collidesWithPoint(mouseLocation.x, mouseLocation.y));
+    myGameArea.sticks[i].update(myGameArea.sticks[i].collidesWithPoint(mouseState.x, mouseState.y));
   }
   for (i = 0; i < myGameArea.wallSegments.length; i += 1) {
     myGameArea.wallSegments[i].update();
