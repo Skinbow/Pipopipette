@@ -10,7 +10,7 @@ var
   GameComponent,
   CollisionBox;
 
-
+//Every element in the game is an instance of GameComponent
 GameComponent = function (x, y, width, height, style, type) {
   "use strict";
   var ctx;
@@ -26,6 +26,7 @@ GameComponent = function (x, y, width, height, style, type) {
     this.active = false;
     this.owner = "";
     this.orientation = style;
+    this.hover = false;
     
     if (this.orientation === "horizontal") {
       this.collisionBox = new CollisionBox(this.x - 1, this.y, this.width + 2, this.height);
@@ -34,15 +35,19 @@ GameComponent = function (x, y, width, height, style, type) {
     }
     
     this.update = function (MouseCollides) {
+      
+      //Introduced to avoid several sticks being activated at once
+      this.checkIfHoveringOverOne(MouseCollides);
+      
       ctx = myGameArea.context;
-      if (this.collisionBox.collidesWithPoint(mouseState.mouseReleaseLocation.x, mouseState.mouseReleaseLocation.y)) {
+      if (this.collisionBox.collidesWithPoint(mouseState.mouseReleaseLocation.x, mouseState.mouseReleaseLocation.y) && this.hover) {
         this.checkIfNeighboursAllowColoration();
       }
       
       if (this.orientation === "horizontal") {
         if (this.active) {
           ctx.drawImage(stickTextures.horizontal[this.owner], this.x, this.y, this.width, this.height);
-        } else if (!MouseCollides) {
+        } else if (!this.hover) {
           ctx.drawImage(stickTextures.horizontal.IDLE, this.x, this.y, this.width, this.height);
         } else {
           ctx.drawImage(stickTextures.horizontal.hover, this.x, this.y, this.width, this.height);
@@ -50,7 +55,7 @@ GameComponent = function (x, y, width, height, style, type) {
       } else if (this.orientation === "vertical") {
         if (this.active) {
           ctx.drawImage(stickTextures.vertical[this.owner], this.x, this.y, this.width, this.height);
-        } else if (!MouseCollides) {
+        } else if (!this.hover) {
           ctx.drawImage(stickTextures.vertical.IDLE, this.x, this.y, this.width, this.height);
         } else {
           ctx.drawImage(stickTextures.vertical.hover, this.x, this.y, this.width, this.height);
@@ -82,6 +87,25 @@ GameComponent = function (x, y, width, height, style, type) {
             this.owner = "yellow";
           }
         }
+      }
+    };
+    
+    this.checkIfHoveringOverOne = function (MouseCollides) {
+      var i,
+        foundHover;
+      if (MouseCollides) {
+        foundHover = false;
+        for (i = 0; i < myGameArea.sticks.length; i += 1) {
+          if (myGameArea.sticks[i].hover) {
+            foundHover = true;
+            break;
+          }
+        }
+        if (!foundHover) {
+          this.hover = true;
+        }
+      } else {
+        this.hover = false;
       }
     };
     
