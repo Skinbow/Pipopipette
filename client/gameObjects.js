@@ -65,6 +65,7 @@ myGameArea = {
 	canvas : document.createElement("canvas"),
   sticks : [],
   wallSegments : [],
+  squares : [],
 	start : function () {
     "use strict";
     
@@ -101,8 +102,18 @@ myGameArea = {
       }
     }
     
+    for (i = 0; i < this.squaresWidth; i += 1) {
+      for (j = 0; j < this.squaresHeight; j += 1) {
+        this.squares.push(new GameComponent(65 * i + 10, 65 * j + 10, 54, 54, "white", "square"));
+      }
+    }
+    
     for (i = 0; i < this.sticks.length; i += 1) {
       this.sticks[i].findNeighbours();
+    }
+    
+    for (i = 0; i < this.squares.length; i += 1) {
+      this.squares[i].findNeighbours();
     }
     
     this.interval = setInterval(updateGame, 20);

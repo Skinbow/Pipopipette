@@ -30,6 +30,9 @@ updateGame = function () {
   for (i = 0; i < myGameArea.wallSegments.length; i += 1) {
     myGameArea.wallSegments[i].update();
   }
+  for (i = 0; i < myGameArea.squares.length; i += 1) {
+    myGameArea.squares[i].update();
+  }
 };
 
 window.onload = startGame;
