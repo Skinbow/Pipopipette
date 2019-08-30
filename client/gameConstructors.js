@@ -3,7 +3,7 @@
   mouseState,
   stickTextures,
   wallTextures
-*/ 
+*/
 
 var
 //Constructors
@@ -27,6 +27,7 @@ GameComponent = function (x, y, width, height, style, type) {
     this.owner = "";
     this.orientation = style;
     this.hover = false;
+    this.neighbouringSquares = [];
     
     if (this.orientation === "horizontal") {
       this.collisionBox = new CollisionBox(this.x - 1, this.y, this.width + 2, this.height);
@@ -35,13 +36,17 @@ GameComponent = function (x, y, width, height, style, type) {
     }
     
     this.update = function (MouseCollides) {
+      var i;
       
       //Introduced to avoid several sticks being activated at once
       this.checkIfHoveringOverOne(MouseCollides);
       
       ctx = myGameArea.context;
       if (this.collisionBox.collidesWithPoint(mouseState.mouseReleaseLocation.x, mouseState.mouseReleaseLocation.y) && this.hover) {
-        this.checkIfNeighboursAllowColoration();
+        this.claimStick("yellow");
+        for (i = 0; i < this.neighbouringSquares.length; i += 1) {
+          this.neighbouringSquares[i].claimSquare("yellow");
+        }
       }
       
       if (this.orientation === "horizontal") {
@@ -78,16 +83,23 @@ GameComponent = function (x, y, width, height, style, type) {
       }
     };
     
-    this.checkIfNeighboursAllowColoration = function () {
-      var i;
+    this.claimStick = function (tryingOwner) {
       if (!this.active) {
-        for (i = 0; i < this.neighbours.length; i += 1) {
-          if (this.neighbours[i].type === "wall segment" || this.neighbours[i].active) {
-            this.active = true;
-            this.owner = "yellow";
-          }
+        if (this.checkIfNeighboursAllowColoration()) {
+          this.active = true;
+          this.owner = tryingOwner;
         }
       }
+    };
+    
+    this.checkIfNeighboursAllowColoration = function () {
+      var i;
+      for (i = 0; i < this.neighbours.length; i += 1) {
+        if (this.neighbours[i].type === "wall segment" || this.neighbours[i].active) {
+          return true;
+        }
+      }
+      return false;
     };
     
     this.checkIfHoveringOverOne = function (MouseCollides) {
@@ -124,12 +136,49 @@ GameComponent = function (x, y, width, height, style, type) {
         ctx.drawImage(wallTextures.right, this.x, this.y, this.width, this.height);
       }
     };
-  } else {
-    this.color = style;
+  } else if (type === "square") {
+    this.owner = style;
+    this.neighbouringSticks = [];
+    this.collisionBox = new CollisionBox(this.x - 4, this.y - 4, this.width + 8, this.height + 8);
     this.update = function () {
       ctx = myGameArea.context;
-      ctx.fillStyle = this.color;
+      ctx.fillStyle = this.owner;
       ctx.fillRect(this.x, this.y, this.width, this.height);
+    };
+    
+    this.claimSquare = function (tryingOwner) {
+      if (this.owner === "white") {
+        if (this.checkIfAllSurroundingSticksActive()) {
+          this.owner = tryingOwner;
+        }
+      }
+    };
+    
+    //Checking if all of the square's neighbours are active
+    this.checkIfAllSurroundingSticksActive = function () {
+      var i,
+        notActive = false;
+      for (i = 0; i < this.neighbouringSticks.length; i += 1) {
+        if (!this.neighbouringSticks[i].active) {
+          notActive = true;
+          break;
+        }
+      }
+      
+      if (!notActive) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+    this.findNeighbours = function () {
+      var i;
+      for (i = 0; i < myGameArea.sticks.length; i += 1) {
+        if (this.collisionBox.collidesWithBox(myGameArea.sticks[i].collisionBox)) {
+          this.neighbouringSticks.push(myGameArea.sticks[i]);
+          myGameArea.sticks[i].neighbouringSquares.push(this);
+        }
+      }
     };
   }
 };
