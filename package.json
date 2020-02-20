@@ -1,0 +1,26 @@
+{
+  "name": "pipopipette",
+  "version": "1.0.0",
+  "description": "A game created by a French mathematician.",
+  "main": "app.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Skinbow/Pipopipette.git"
+  },
+  "keywords": [
+    "Pipopipette",
+    "sticks",
+    "game"
+  ],
+  "author": "Mikhail Yakimenko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Skinbow/Pipopipette/issues"
+  },
+  "homepage": "https://github.com/Skinbow/Pipopipette#readme"
+}
