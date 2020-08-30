@@ -1,10 +1,11 @@
 {
   "name": "pipopipette",
   "version": "1.0.0",
-  "description": "A game created by a French mathematician.",
-  "main": "app.js",
-  "dependencies": {},
-  "devDependencies": {},
+  "description": "A game invented by a French mathematician",
+  "main": "server.js",
+  "directories": {
+    "lib": "lib"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,15 +13,23 @@
     "type": "git",
     "url": "git+https://github.com/Skinbow/Pipopipette.git"
   },
-  "keywords": [
-    "Pipopipette",
-    "sticks",
-    "game"
-  ],
   "author": "Mikhail Yakimenko",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Skinbow/Pipopipette/issues"
   },
-  "homepage": "https://github.com/Skinbow/Pipopipette#readme"
+  "homepage": "https://github.com/Skinbow/Pipopipette#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "http": "0.0.1-security",
+    "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.7.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1"
+  }
 }

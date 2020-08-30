@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Pipopipette</title>
+        <link rel="icon" type="image/png" href="assets/Pipopipette_icon.png">
+        <!--<link rel="stylesheet" type="text/css" href="style.css">-->
+    </head>
+    <body>
+        <form action="/game" method="get" target="_self">
+            <label for="nname">Your nickname:</label><br>
+            <input type="text" id="nname" name="nname" autofocus autocomplete="off"><br>
+
+            <input type="radio" id="create" name="gameopt" value="create" checked>
+            <label for="create">Create game</label>
+
+            <input type="radio" id="join" name="gameopt" value="join">
+            <label for="join">Join existing game</label>
+            <br>
+            <label for="size">Choose board size:</label>
+            <fieldset id="size">
+                <input type="number" id="xSize" name="xsize" value="7">
+                <input type="number" id="ySize" name="ysize" value="7">
+            </fieldset>
+            <label for="playerNum">Number of players:</label>
+            <input type="number" id="playerNum" name="playernum" value="2">
+            <br>
+            <label for="index">Joining address</label>
+            <fieldset id="index">
+                <input type="number" id="index" name="index">
+            </fieldset>
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+    </body>
+</html>
