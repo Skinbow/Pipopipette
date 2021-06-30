@@ -2,34 +2,45 @@
 <html>
     <head>
         <title>Pipopipette</title>
-        <link rel="icon" type="image/png" href="assets/Pipopipette_icon.png">
-        <!--<link rel="stylesheet" type="text/css" href="style.css">-->
+        <link rel="icon" type="image/png" href="client/assets/Pipopipette_icon.png">
+        <script src="socket.io/socket.io.js"></script>
     </head>
     <body>
-        <form action="/game" method="get" target="_self">
-            <label for="nname">Your nickname:</label><br>
-            <input type="text" id="nname" name="nname" autofocus autocomplete="off"><br>
+        <div id="submitDiv">
+            <form id="gameForm">
+                <label for="nickName">Your nickname:</label><br>
+                <input type="text" id="nickName" autofocus autocomplete="off"><br>
 
-            <input type="radio" id="create" name="gameopt" value="create" checked>
-            <label for="create">Create game</label>
+                <input type="radio" id="create" name="gameopt" value="create" checked>
+                <label for="create">Create game</label>
 
-            <input type="radio" id="join" name="gameopt" value="join">
-            <label for="join">Join existing game</label>
-            <br>
-            <label for="size">Choose board size:</label>
-            <fieldset id="size">
-                <input type="number" id="xSize" name="xsize" value="7">
-                <input type="number" id="ySize" name="ysize" value="7">
-            </fieldset>
-            <label for="playerNum">Number of players:</label>
-            <input type="number" id="playerNum" name="playernum" value="2">
-            <br>
-            <label for="index">Joining address</label>
-            <fieldset id="index">
-                <input type="number" id="index" name="index">
-            </fieldset>
-            <br>
-            <input type="submit" value="Submit">
-        </form>
+                <input type="radio" id="join" name="gameopt" value="join">
+                <label for="join">Join existing game</label>
+
+                <br>
+                <div id="gameCreateDiv">
+                    <label for="size">Choose board size:</label>
+                    <fieldset id="size">
+                        <input type="number" id="xSize" value="7">
+                        <input type="number" id="ySize" value="7">
+                    </fieldset>
+
+                    <label for="playerNum">Number of players:</label>
+                    <input type="number" id="playerNum" value="2">
+                </div>
+
+                <div id="gameJoinDiv" style="display: none;">
+                    <label for="index">Joining address</label>
+                    <fieldset id="gameIndex">
+                        <input type="number" id="index">
+                    </fieldset>
+                </div>
+
+                <input type="button" id="submitButton" value="Submit">
+
+                <h2 id="joinFailedMessage" style="display: none; color: red;"></h2>
+            </form>
+        </div>
+        <script src="client.js"></script>
     </body>
 </html>

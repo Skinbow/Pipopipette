@@ -24,9 +24,14 @@ module.exports = {
         "semi": [
             "error",
             "always"
+        ],
+        "no-unused-vars": [
+            "off"
         ]
     },
     "globals": {
-        "socket": "writeable"
+        "socket": "writeable",
+        "serialize": "readable",
+        "io": "writeable"
     }
 };
