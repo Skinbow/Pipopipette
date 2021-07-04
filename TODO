@@ -1,1 +1,3 @@
 Make indicies random and not in ascending order
+Make messages for invalid form fillins
+Make the game get deleted only if it had already started when the user left

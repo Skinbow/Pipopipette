@@ -32,6 +32,9 @@ module.exports = {
     "globals": {
         "socket": "writeable",
         "serialize": "readable",
-        "io": "writeable"
+        "io": "writeable",
+        "players": "writeable",
+        "Game_MODULE": "writeable",
+        "Multiplayer_MODULE": "writeable"
     }
 };
