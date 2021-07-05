@@ -35,6 +35,6 @@ module.exports = {
         "io": "writeable",
         "players": "writeable",
         "Game_MODULE": "writeable",
-        "Multiplayer_MODULE": "writeable"
+        "Form_MODULE": "writeable"
     }
 };
