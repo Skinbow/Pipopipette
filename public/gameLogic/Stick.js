@@ -27,20 +27,20 @@ Game_MODULE = (function (Game_MODULE) {
         }
 
         // How the stick updates at every frame
-        update (mouseState, stickTextures, myGameArea) {
+        update (mouseState, stickTextures, myGameArea, myTurn) {
             let MouseCollides = this.collisionBox.collidesWithPoint(mouseState.x, mouseState.y);
 
             // Made to avoid several sticks being activated at once
             this.checkIfHoveringOverOne(MouseCollides, myGameArea);
 
             // Active if mouse was hovering over this stick only and the left mouse button was released
-            if (this.collisionBox.collidesWithPoint(mouseState.mouseReleaseLocation.x, mouseState.mouseReleaseLocation.y) && mouseState.mouseReleaseLocation.recently && this.hover) {
+            if (this.collisionBox.collidesWithPoint(mouseState.mouseReleaseLocation.x, mouseState.mouseReleaseLocation.y) && mouseState.mouseReleaseLocation.recently && this.hover && myTurn) {
                 mouseState.mouseReleaseLocation.recently = false;
-                this.claimStick(players[socket.id]);
+                this.claimStick(myGameArea.playersTurn);
                 for (let i = 0; i < this.neighbouringSquares.length; i += 1) {
                     // Trying to claim surrounding squares which get claimed if all the sticks surrounding them are active
-                    console.log("The color of the player who is claiming is: " + players[socket.id].color);
-                    this.neighbouringSquares[i].claimSquare(players[socket.id].color);
+                    console.log("The color of the player who is claiming is: " + myGameArea.playersTurn.color);
+                    this.neighbouringSquares[i].claimSquare(myGameArea.playersTurn.color);
                 }
             }
             this.display(myGameArea.context, stickTextures);
@@ -99,7 +99,7 @@ Game_MODULE = (function (Game_MODULE) {
                 // If stick touches an active stick or a wall segment
                 if (this.checkIfNeighboursAllowColoration()) {
                     this.owner = tryingOwner.color;
-                    console.log("stick claimed by " + tryingOwner.name);
+                    console.log("stick claimed by " + tryingOwner.nickname);
                     socket.emit("claimedStick", tryingOwner, this.id);
                 }
             }
@@ -107,8 +107,11 @@ Game_MODULE = (function (Game_MODULE) {
 
         // Checks if stick touches an active stick or a wall segment
         checkIfNeighboursAllowColoration () {
-            for (let i = 0; i < this.neighbours.length; i += 1) {
-                if (this.neighbours[i].type === "wall segment" || this.neighbours[i].isActive()) {
+            if (this.neighbouringWallSegments.length > 0)
+                return true;
+
+            for (let i = 0; i < this.neighbouringSticks.length; i += 1) {
+                if (this.neighbouringSticks[i].isActive()) {
                     return true;
                 }
             }

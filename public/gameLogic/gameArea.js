@@ -11,7 +11,8 @@ Game_MODULE = (function (Game_MODULE) {
         this.sticks = [],
         this.wallSegments = [],
         this.squares = [],
-        this.turn = 0;
+        this.playersTurn = {},
+        this.myTurn = false;
 
         // Function that initialises everything
         this.setupCanvas = function (xSize, ySize) {
@@ -46,9 +47,10 @@ Game_MODULE = (function (Game_MODULE) {
             this.canvas.remove();
         };
 
-        this.setPlayersTurn = function (playerId)
+        this.setPlayersTurn = function (myId, playerId, playerNickname, playerColor)
         {
-            this.turn = playerId;
+            this.playersTurn = {id: playerId, nickname: playerNickname, color: playerColor};
+            this.myTurn = (myId === playerId);
         };
 
         // Filling GameComponent list with sticks

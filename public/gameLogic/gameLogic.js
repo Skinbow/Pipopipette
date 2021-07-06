@@ -12,34 +12,38 @@ Game_MODULE = (function (Game_MODULE) {
         Game_MODULE.wallTextures.init();
         Game_MODULE.stickTextures.init();
 
+        let gameArea = Game_MODULE.gameArea;
+
         // Starting gameArea
-        Game_MODULE.gameArea.setupCanvas(XSize, YSize);
+        gameArea.setupCanvas(XSize, YSize);
         // Setting update frequency
-        Game_MODULE.gameArea.updateInterval = setInterval(updateGame, 20);
+        gameArea.updateInterval = setInterval(updateGame, 20);
 
         // Adding event listeners
-        Game_MODULE.gameArea.canvas.addEventListener("mousemove", mouseState.changeMousePos);
-        Game_MODULE.gameArea.canvas.addEventListener("mouseup", mouseState.mouseReleased);
+        gameArea.canvas.addEventListener("mousemove", mouseState.changeMousePos);
+        gameArea.canvas.addEventListener("mouseup", mouseState.mouseReleased);
     };
 
     // Updates entire gameboard
     updateGame = function () {
+        let gameArea = Game_MODULE.gameArea;
+
         // Clears the canvas
-        Game_MODULE.gameArea.clear();
+        gameArea.clear();
 
         // Updates sticks checking if they collide with the mouse
-        for (let i = 0; i < Game_MODULE.gameArea.sticks.length; i += 1) {
-            Game_MODULE.gameArea.sticks[i].update(mouseState, Game_MODULE.stickTextures, Game_MODULE.gameArea);
+        for (let i = 0; i < gameArea.sticks.length; i += 1) {
+            gameArea.sticks[i].update(mouseState, Game_MODULE.stickTextures, gameArea, gameArea.myTurn);
         }
 
         // Updates wallSegments
-        for (let i = 0; i < Game_MODULE.gameArea.wallSegments.length; i += 1) {
-            Game_MODULE.gameArea.wallSegments[i].update(Game_MODULE.gameArea.context, Game_MODULE.wallTextures);
+        for (let i = 0; i < gameArea.wallSegments.length; i += 1) {
+            gameArea.wallSegments[i].update(gameArea.context, Game_MODULE.wallTextures);
         }
 
         // Updates squares
-        for (let i = 0; i < Game_MODULE.gameArea.squares.length; i += 1) {
-            Game_MODULE.gameArea.squares[i].update(Game_MODULE.gameArea.context, Game_MODULE.gameArea);
+        for (let i = 0; i < gameArea.squares.length; i += 1) {
+            gameArea.squares[i].update(gameArea.context, gameArea);
         }
     };
 

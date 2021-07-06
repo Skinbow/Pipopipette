@@ -57,20 +57,32 @@
 
             Game_MODULE.startGame(socket.XSize, socket.YSize);
             
-            //socket.on("players_turn", gameToManage.playerSockets[playersTurnIndex].id);
+            socket.on("players_turn", (playersTurnId) => {
+                Game_MODULE.gameArea.setPlayersTurn(socket.id, playersTurnId, players.dict[playersTurnId], players.nextColor());
+            });
         });
     };
 
     players = {
         dict: {},
+        availableColors: ["yellow", "blue"],//, "blue", "yellow"],
+        colorCount: 0,
         add: function (id, nickname)
         {
-            this.dict[id] = {nickname: nickname, color: "red"};
+            this.dict[id] = {nickname: nickname};
         },
         remove: function (id)
         {
             if (Object.prototype.hasOwnProperty.call(this.dict, id))
                 delete this.dict[id];
+        },
+        nextColor: function()
+        {
+            let color = this.availableColors[this.colorCount];
+            this.colorCount++;
+            if (this.colorCount === this.availableColors.length)
+                this.colorCount = 0;
+            return color;
         }
     };
 
@@ -87,7 +99,7 @@
 
     startExchangeWithServer = function ()
     {
-        console.log("My socket id is: " +  socket.id);
+        console.log("My socket id is: " + socket.id);
 
         if (Form_MODULE.formVariables.gameopt === "create")
         {

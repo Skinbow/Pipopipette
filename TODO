@@ -3,3 +3,4 @@ Make messages for invalid form fillins
 Make the game get deleted only if it had already started when the user left
 for in for of
 Center the joining message
+Display wall segments collision boxes
