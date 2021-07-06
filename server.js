@@ -93,6 +93,9 @@ manageGame = function (gameIndex) {
         let socket = gameToManage.playerSockets[i];
         socket.emit("players_turn", gameToManage.playerSockets[playersTurnIndex].id);
         console.log("Sent to " + socket.id + " that it's the turn of " + gameToManage.playerSockets[playersTurnIndex].id);
+        socket.on("claimedStick", (tryingOwner, stickId) => {
+            
+        });
     }
 };
 

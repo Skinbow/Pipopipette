@@ -27,7 +27,7 @@ Game_MODULE = (function (Game_MODULE) {
         }
 
         // How the stick updates at every frame
-        update (mouseState, stickTextures, myGameArea, myTurn) {
+        update (mouseState, stickTextures, myGameArea, myTurn, stickClaimAlertFunction) {
             let MouseCollides = this.collisionBox.collidesWithPoint(mouseState.x, mouseState.y);
 
             // Made to avoid several sticks being activated at once
@@ -36,7 +36,7 @@ Game_MODULE = (function (Game_MODULE) {
             // Active if mouse was hovering over this stick only and the left mouse button was released
             if (this.collisionBox.collidesWithPoint(mouseState.mouseReleaseLocation.x, mouseState.mouseReleaseLocation.y) && mouseState.mouseReleaseLocation.recently && this.hover && myTurn) {
                 mouseState.mouseReleaseLocation.recently = false;
-                this.claimStick(myGameArea.playersTurn);
+                this.claimStick(myGameArea.playersTurn, stickClaimAlertFunction);
                 for (let i = 0; i < this.neighbouringSquares.length; i += 1) {
                     // Trying to claim surrounding squares which get claimed if all the sticks surrounding them are active
                     console.log("The color of the player who is claiming is: " + myGameArea.playersTurn.color);
@@ -93,14 +93,14 @@ Game_MODULE = (function (Game_MODULE) {
         }
 
         // Attempt to claim stick
-        claimStick (tryingOwner) {
+        claimStick (tryingOwner, stickClaimAlertFunction) {
             // If stick already belongs to someone
             if (!this.isActive()) {
                 // If stick touches an active stick or a wall segment
                 if (this.checkIfNeighboursAllowColoration()) {
                     this.owner = tryingOwner.color;
                     console.log("stick claimed by " + tryingOwner.nickname);
-                    socket.emit("claimedStick", tryingOwner, this.id);
+                    stickClaimAlertFunction(tryingOwner, this.id);
                 }
             }
         }

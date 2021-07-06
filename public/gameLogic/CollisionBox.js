@@ -21,8 +21,8 @@ var Game_MODULE = (function () {
 
         // Checks whether two collisionBox objects collide
         collidesWithBox (otherBox) {
-            if ((this.x <= otherBox.x + otherBox.width || this.x + this.width >= otherBox.x) &&
-                (this.y <= otherBox.y + otherBox.height || this.y + this.height >= otherBox.y)) {
+            if (!(this.x >= otherBox.x + otherBox.width || this.x + this.width <= otherBox.x ||
+                this.y >= otherBox.y + otherBox.height || this.y + this.height <= otherBox.y)) {
                 return true;
             // // Checking if any of the other object"s corners collide with this object
             // if (this.collidesWithPoint(otherBox.x, otherBox.y) ||

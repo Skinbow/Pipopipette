@@ -55,7 +55,8 @@
                 resetPage();
             });
 
-            Game_MODULE.startGame(socket.XSize, socket.YSize);
+            let stickClaimAlertFunction = function (tryingOwner, stickId) { socket.emit("claimedStick", tryingOwner, stickId); };
+            Game_MODULE.startGame(socket.XSize, socket.YSize, stickClaimAlertFunction);
             
             socket.on("players_turn", (playersTurnId) => {
                 Game_MODULE.gameArea.setPlayersTurn(socket.id, playersTurnId, players.dict[playersTurnId], players.nextColor());

@@ -19,6 +19,8 @@ Game_MODULE = (function (Game_MODULE) {
             } else if (this.orientation === "right") {
                 ctx.drawImage(wallTextures.right, this.x, this.y, this.width, this.height);
             }
+            // ctx.strokeStyle = "green";
+            // ctx.strokeRect(this.collisionBox.x, this.collisionBox.y, this.collisionBox.width, this.collisionBox.height);
         }
     }
     Game_MODULE.WallSegment = WallSegment;

@@ -7,7 +7,7 @@ Game_MODULE = (function (Game_MODULE) {
     let mouseState;
     
     // Begins the game
-    startGame = function (XSize, YSize) {
+    startGame = function (XSize, YSize, stickClaimAlertFunction) {
         // Extracting images from paths
         Game_MODULE.wallTextures.init();
         Game_MODULE.stickTextures.init();
@@ -17,7 +17,7 @@ Game_MODULE = (function (Game_MODULE) {
         // Starting gameArea
         gameArea.setupCanvas(XSize, YSize);
         // Setting update frequency
-        gameArea.updateInterval = setInterval(updateGame, 20);
+        gameArea.updateInterval = setInterval(function () { updateGame(stickClaimAlertFunction); }, 20);
 
         // Adding event listeners
         gameArea.canvas.addEventListener("mousemove", mouseState.changeMousePos);
@@ -25,7 +25,7 @@ Game_MODULE = (function (Game_MODULE) {
     };
 
     // Updates entire gameboard
-    updateGame = function () {
+    updateGame = function (stickClaimAlertFunction) {
         let gameArea = Game_MODULE.gameArea;
 
         // Clears the canvas
@@ -33,7 +33,7 @@ Game_MODULE = (function (Game_MODULE) {
 
         // Updates sticks checking if they collide with the mouse
         for (let i = 0; i < gameArea.sticks.length; i += 1) {
-            gameArea.sticks[i].update(mouseState, Game_MODULE.stickTextures, gameArea, gameArea.myTurn);
+            gameArea.sticks[i].update(mouseState, Game_MODULE.stickTextures, gameArea, gameArea.myTurn, stickClaimAlertFunction);
         }
 
         // Updates wallSegments
