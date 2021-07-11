@@ -4,7 +4,7 @@ Game_MODULE = (function (Game_MODULE) {
         constructor (x, y, width, height) {
             super(x, y, width, height);
 
-            this.owner = "white";
+            this.owner = {id: "", nickname: "", color: "white"};
 
             // List containing all sticks that touch the square
             this.neighbouringSticks = [];
@@ -14,16 +14,17 @@ Game_MODULE = (function (Game_MODULE) {
         // How the square updates at every frame
         update (ctx, myGameArea) {
             ctx = myGameArea.context;
-            ctx.fillStyle = this.owner;
+            ctx.fillStyle = this.owner.color;
             ctx.fillRect(this.x, this.y, this.width, this.height);
         }
 
         // Claims the square located next to a clicked stick
         // If all of the square"s neighbouring sticks are active, it will be colored
         claimSquare (tryingOwner) {
-            if (this.owner === "white") {
+            if (this.owner.color === "white") {
                 if (this.checkIfAllSurroundingSticksActive()) {
                     this.owner = tryingOwner;
+                    console.log("Square claimed by " + Game_MODULE.gameArea.playersTurn.nickname + " with the color " + Game_MODULE.gameArea.playersTurn.color);
                 }
             }
         }

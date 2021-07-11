@@ -46,7 +46,10 @@
         socket.on("start_game", () => {
             // TODO: Forbid new players from joining when game starts
             console.log("All " + Object.keys(players.dict).length + " players joined, starting game.");
+            console.groupEnd("Connection details");
             clearWaitingMessages();
+
+            console.group("Game messages");
 
             socket.off("player_disconnected");
             socket.on("player_disconnected", (id) => {
@@ -55,18 +58,30 @@
                 resetPage();
             });
 
-            let stickClaimAlertFunction = function (tryingOwner, stickId) { socket.emit("claimedStick", tryingOwner, stickId); };
+            let stickClaimAlertFunction = function (tryingOwnerId, stickId) {
+                socket.emit("claimed_stick", tryingOwnerId, stickId);
+            };
             Game_MODULE.startGame(socket.XSize, socket.YSize, stickClaimAlertFunction);
             
             socket.on("players_turn", (playersTurnId) => {
-                Game_MODULE.gameArea.setPlayersTurn(socket.id, playersTurnId, players.dict[playersTurnId], players.nextColor());
+                Game_MODULE.gameArea.setPlayersTurn(socket.id, playersTurnId, players.dict[playersTurnId].nickname, players.nextColor());
+            });
+
+            socket.on("claimed_stick", (tryingOwnerId, stickId) => {
+                let gameArea = Game_MODULE.gameArea;
+                let stick = gameArea.sticks[stickId];
+                stick.claimStick(Game_MODULE.gameArea.playersTurn, null);
+                for (let i = 0; i < stick.neighbouringSquares.length; i += 1) {
+                    // Trying to claim surrounding squares which get claimed if all the sticks surrounding them are active
+                    stick.neighbouringSquares[i].claimSquare(gameArea.playersTurn);
+                }
             });
         });
     };
 
     players = {
         dict: {},
-        availableColors: ["yellow", "blue"],//, "blue", "yellow"],
+        availableColors: ["blue", "red", "green", "yellow"],
         colorCount: 0,
         add: function (id, nickname)
         {
@@ -88,6 +103,7 @@
     };
 
     createSocket = function () {
+        console.group("Connection details");
         socket = io();
         // Set event listener
         socket.on("connect", function() {
@@ -172,8 +188,8 @@
                 players.dict = gameInfo.playerdict;
                 displayedMessage.message.innerHTML = "Waiting for other players to join";
 
-                console.log("Number of players: " + Object.keys(gameInfo.playerdict).length);
                 console.log("Joined game with index " + Form_MODULE.formVariables.gameIndex.value);
+                console.log("Number of players: " + Object.keys(gameInfo.playerdict).length);
                 waitForPlayers();
             });
         }

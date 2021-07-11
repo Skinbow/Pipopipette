@@ -7,43 +7,25 @@ Game_MODULE = (function (Game_MODULE) {
 
     // Textures imported from Assets folder for the "stick" type GameComponents
     stickTextures = {
-        vertical:
-        {
-            IDLE: "./public/assets/StickVertical.png",
-            hover: "./public/assets/StickVertical_hover.png",
-            yellow: "./public/assets/StickVertical_yellow.png",
-            blue: "./public/assets/StickVertical_blue.png"
-        },
-        horizontal:
-        {
-            IDLE: "./public/assets/StickHorizontal.png",
-            hover: "./public/assets/StickHorizontal_hover.png",
-            yellow: "./public/assets/StickHorizontal_yellow.png",
-            blue: "./public/assets/StickHorizontal_blue.png"
-        },
+        types: ["IDLE", "hover", "yellow", "blue", "red", "green"],
+        horizontal: [],
+        vertical: [],
 
         // Method used to extract images from paths
         init: function () {
             if (Game_MODULE.stickTexturesInitiated)
                 return;
 
-            let orientation,
-                key,
-                tempImg;
-
+            let tempImg;
             // Creating images with given source paths
-            for (orientation in stickTextures) {
-                if (orientation !== "init" && Object.prototype.hasOwnProperty.call(stickTextures, orientation)) {
-                    for (key in stickTextures[orientation]) {
-                        if (Object.prototype.hasOwnProperty.call(stickTextures[orientation], key))
-                        {
-                            tempImg = new Image();
-                            tempImg.src = stickTextures[orientation][key];
-                            stickTextures[orientation][key] = tempImg;
-                        }
-                        
-                    }
-                }
+            for (let type of this.types) {
+                tempImg = new Image();
+                tempImg.src = "./public/assets/StickTextures/" + type + "/StickHorizontal.png";
+                this["horizontal"][type] = tempImg;
+
+                tempImg = new Image();
+                tempImg.src = "./public/assets/StickTextures/" + type + "/StickVertical.png";
+                this["vertical"][type] = tempImg;
             }
             Game_MODULE.stickTexturesInitiated = true;
         }
@@ -51,10 +33,10 @@ Game_MODULE = (function (Game_MODULE) {
 
     // Textures imported from Assets folder for the "wall segment" type GameComponents
     wallTextures = {
-        top: "./public/assets/WallTop.png",
-        left: "./public/assets/WallLeft.png",
-        bottom: "./public/assets/WallBottom.png",
-        right: "./public/assets/WallRight.png",
+        top: "./public/assets/WallTextures/WallTop.png",
+        left: "./public/assets/WallTextures/WallLeft.png",
+        bottom: "./public/assets/WallTextures/WallBottom.png",
+        right: "./public/assets/WallTextures/WallRight.png",
 
         // Method used to extract images from paths
         init: function () {

@@ -2,7 +2,10 @@ var express = require("express");
 const { join } = require("path");
 var app = express();
 var http = require("http").createServer(app);
+var favicon = require("serve-favicon");
 var io = require("socket.io")(http);
+
+app.use(favicon(__dirname + "/public/assets/favicon.ico"));
 
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/public/index.html");
@@ -12,6 +15,7 @@ app.use("/public", express.static("public"));
 var games;
 var generateGameIndex;
 var manageGame;
+var broadcastPlayersTurn;
 
 generateGameIndex = () => {
     let tryIndex = 0;
@@ -45,7 +49,7 @@ games = {
     },
     addPlayer: function (socket, gameIndex, playerInfo)
     {
-        this.gamesList[gameIndex].playerdict[playerInfo.id] = {nickname: playerInfo.nickname, color: "red"};
+        this.gamesList[gameIndex].playerdict[playerInfo.id] = {nickname: playerInfo.nickname};
         socket.gameIndex = gameIndex;
     },
     removePlayer: function (gameIndex, playerId)
@@ -82,19 +86,37 @@ games = {
     }
 };
 
+broadcastPlayersTurn = function (game, playersTurnIndex) {
+    for (let i = 0; i < game.expectedPlayers; i++)
+    {
+        let socket = game.playerSockets[i];
+        socket.emit("players_turn", game.playerSockets[playersTurnIndex].id);
+        console.log("Sent to " + socket.id + " that it's the turn of " + game.playerSockets[playersTurnIndex].id);
+    }
+};
+
 manageGame = function (gameIndex) {
     let gameToManage = games.gamesList[gameIndex];
     games.getPlayersSockets(gameIndex);
 
     let playersTurnIndex = 0;
-
+    broadcastPlayersTurn(gameToManage, playersTurnIndex);
+    
     for (let i = 0; i < gameToManage.expectedPlayers; i++)
     {
         let socket = gameToManage.playerSockets[i];
-        socket.emit("players_turn", gameToManage.playerSockets[playersTurnIndex].id);
-        console.log("Sent to " + socket.id + " that it's the turn of " + gameToManage.playerSockets[playersTurnIndex].id);
-        socket.on("claimedStick", (tryingOwner, stickId) => {
-            
+
+        socket.on("claimed_stick", (tryingOwnerId, stickId) => {
+            for (let otherSocket of gameToManage.playerSockets)
+            {
+                if (otherSocket.id !== socket.id)
+                {
+                    otherSocket.emit("claimed_stick", tryingOwnerId, stickId);
+                }
+            }
+            if (++playersTurnIndex >= gameToManage.expectedPlayers)
+                playersTurnIndex = 0;
+            broadcastPlayersTurn(gameToManage, playersTurnIndex);
         });
     }
 };

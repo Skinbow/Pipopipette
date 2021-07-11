@@ -41,7 +41,7 @@ Game_MODULE = (function (Game_MODULE) {
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         };
 
-        // Destroys the canvas and cancles the canvas's updates
+        // Destroys the canvas and cancles the canvas's hs
         this.destroy = function () {
             clearInterval(this.updateInterval);
             this.canvas.remove();
