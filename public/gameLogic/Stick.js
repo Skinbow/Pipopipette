@@ -100,7 +100,7 @@ Game_MODULE = (function (Game_MODULE) {
                     this.owner = tryingOwner;
                     console.log("Stick claimed by " + tryingOwner.nickname + " with the color " + tryingOwner.color);
                     if (stickClaimAlertFunction !== null)
-                        stickClaimAlertFunction(tryingOwner.id, this.id);
+                        stickClaimAlertFunction(this.id);
                 }
             }
         }

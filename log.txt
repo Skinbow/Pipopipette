@@ -1,0 +1,94 @@
+[33m[nodemon] 2.0.6[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): *.*[39m
+[33m[nodemon] watching extensions: js,mjs,json[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+
+The user with the socket id d8mForygQFQhCZ0sAAAB connected!
+
+Requested game index 2 does not exist!
+
+The user with the socket id DlhlhtRLSRdSsLMOAAAD connected!
+
+Game with index 5 was successfully created!
+
+The user with the socket id UEz3nV64MTRq62TCAAAF connected!
+
+There are 2 users connected to game with index 5
+Telling the room 5 that the player with id UEz3nV64MTRq62TCAAAF has joined.
+DlhlhtRLSRdSsLMOAAAD
+Broadcast to everyone that it's the turn of undefined
+
+User with socket id d8mForygQFQhCZ0sAAAB disconnected!
+
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+
+The user with the socket id ly5T0llzalPA3hNCAAAB connected!
+
+Game with index 5 was successfully created!
+
+The user with the socket id lTW-4uf3WQW8mgoDAAAD connected!
+
+There are 2 users connected to game with index 5
+Telling the room 5 that the player with id lTW-4uf3WQW8mgoDAAAD has joined.
+ly5T0llzalPA3hNCAAAB
+Broadcast to everyone that it's the turn of e
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+
+The user with the socket id QYoyZtjSx36JebRvAAAB connected!
+
+Game with index 8 was successfully created!
+
+The user with the socket id mhMk4c8fNhwrAsI1AAAD connected!
+
+There are 2 users connected to game with index 8
+Telling the room 8 that the player with id mhMk4c8fNhwrAsI1AAAD has joined.
+Broadcast to everyone that it's the turn of d
+0
+Broadcast to everyone that it's the turn of e
+1
+Broadcast to everyone that it's the turn of d
+0
+Broadcast to everyone that it's the turn of e
+1
+Broadcast to everyone that it's the turn of d
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+
+The user with the socket id aD2LmVzP6wRo0k76AAAB connected!
+
+Game with index 7 was successfully created!
+
+The user with the socket id V50iLfrrRHQIEs0jAAAD connected!
+
+There are 2 users connected to game with index 7
+Telling the room 7 that the player with id V50iLfrrRHQIEs0jAAAD has joined.
+Broadcast to everyone that it's the turn of d
+Broadcast to everyone that it's the turn of e
+Broadcast to everyone that it's the turn of d
+Broadcast to everyone that it's the turn of e
+Broadcast to everyone that it's the turn of d
+Broadcast to everyone that it's the turn of e
+Broadcast to everyone that it's the turn of d
+Deleting game with index 7
+
+User with socket id V50iLfrrRHQIEs0jAAAD disconnected!
+
+
+User with socket id aD2LmVzP6wRo0k76AAAB disconnected!
+
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000

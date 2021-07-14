@@ -2,20 +2,62 @@
 
 (function () {
     // Functions
-    // Make socket emit game creation or game join request
+    /** 
+     * Make socket emit game creation or game join request
+     * @type {function(): void}
+     */
     let startExchangeWithServer;
-    // Function that creates a websocket connection
+    /** 
+     * Function that creates a websocket connection
+     * @type {function(): void}
+     */
     let createSocket;
-    // Wait for remaining players to join the game
+    /**
+     * Wait for remaining players to join the game
+     * @type {function(): void}
+     */
     let waitForPlayers;
-    // When all players joined the game, remove the displayed waiting message
+    /**
+     * When all players joined the game, remove the displayed waiting message
+     * @type {function(): void}
+     */
     let clearWaitingMessages;
-    // Resets the page for the user
+    /**
+     * Resets the page for the user
+     * @type {function(): void}
+     */
     let resetPage;
 
     // Objects
+    /**
+     * @typedef playerInformation
+     * @type {Object}
+     * @property {String} nickname The nickname of the player
+     */
+    /**
+     * @typedef addPlayerType
+     * @type {function(String, String): void}
+     * @param {String} id New player's id
+     * @param {String} nickname New player's nickname
+     */
+    /**
+     * Namespace for managing player info
+     * @typedef playersNamespace
+     * @type {Object}
+     * @property {Map<String, playerInformation>} dict Dictionary containing players info
+     * @property {String[]} availableColors Colors that can be played
+     * @property {number} colorCount Counter for the color being used
+     * @property {addPlayerType} addPlayer Add a new player to the dictionary
+     */
+    /**
+     * @type {playersNamespace}
+     */
     let players;
 
+    /**
+     * The client side of the socket
+     * @type {Object}
+     */
     let socket;
     
     resetPage = function () {
@@ -35,69 +77,120 @@
     };
 
     // Waits for the number of players to be equal to the one set by game owner
-    waitForPlayers = () => {
-        // When another player joins the same game
-        socket.on("new_player", (playerInfo) => {
-            console.log("New player joining game!");
+    waitForPlayers = function () {
+        /**
+         * When another player joins the same game
+         * 
+         * @param {Object} playerInfo Info about the new player
+         * @param {String} playerInfo.id Id of the new player
+         * @param {String} playerInfo.nickname Nickname of the new player
+         */
+        const alertedNewPlayer = (playerInfo) => {
+            console.log(playerInfo.nickname + " is joining the game!");
             players.add(playerInfo.id, playerInfo.nickname);
-            console.log(Object.keys(players.dict).length + " players have joined this game.");
-        });
+            console.log(players.dict.size + " players have joined this game.");
+        };
 
-        socket.on("start_game", () => {
+        /**
+         * When another player disconnects from the game
+         * 
+         * @param {String} id Id of the disconnected player
+         */
+        const alertedPlayerDisconnected = (id) => {
+            alert("Player " + players.dict.get(id).nickname + " disconnected!");
+            Game_MODULE.gameArea.destroy();
+            resetPage();
+        };
+
+        /**
+         * When it's a different player's turn
+         * 
+         * @param {String} playersTurnId Id of the player whose turn it is
+         */
+        const alertedPlayersTurn = (playersTurnId) => {
+            Game_MODULE.gameArea.setPlayersTurn(socket.id, playersTurnId, players.dict.get(playersTurnId).nickname, players.nextColor(players.dict.size));
+        };
+
+        /**
+         * When a stick is claimed by a player
+         * 
+         * @param {number} stickId Id of the stick that was claimed
+         */
+        const alertedClaimedStick = (stickId) => {
+            let gameArea = Game_MODULE.gameArea;
+            let stick = gameArea.sticks[stickId];
+            stick.claimStick(Game_MODULE.gameArea.playersTurn, null);
+            for (let i = 0; i < stick.neighbouringSquares.length; i += 1) {
+                // Trying to claim surrounding squares which get claimed if all the sticks surrounding them are active
+                stick.neighbouringSquares[i].claimSquare(gameArea.playersTurn);
+            }
+        };
+
+        /**
+         * When the game can start, aka enough players have joined
+         * 
+         * @type {function}
+         */
+        const alertedStartGame = () => {
             // TODO: Forbid new players from joining when game starts
-            console.log("All " + Object.keys(players.dict).length + " players joined, starting game.");
-            console.groupEnd("Connection details");
             clearWaitingMessages();
 
+            console.log("All " + players.dict.size + " players joined, starting game.");
+            console.groupEnd("Connection details");
             console.group("Game messages");
 
-            socket.off("player_disconnected");
-            socket.on("player_disconnected", (id) => {
-                alert("Player " + players.dict[id].nickname + " disconnected!");
-                Game_MODULE.gameArea.destroy();
-                resetPage();
-            });
-
-            let stickClaimAlertFunction = function (tryingOwnerId, stickId) {
-                socket.emit("claimed_stick", tryingOwnerId, stickId);
-            };
+            /**
+             * Alert the server that this user has claimed a stick
+             * 
+             * @param {String} myId Id of the player who claimed the stick, that is this player
+             * @param {number} stickId Id of the stick that was claimed
+             */
+            const stickClaimAlertFunction = (stickId) => { socket.emit("claimed_stick", stickId); };
             Game_MODULE.startGame(socket.XSize, socket.YSize, stickClaimAlertFunction);
             
-            socket.on("players_turn", (playersTurnId) => {
-                Game_MODULE.gameArea.setPlayersTurn(socket.id, playersTurnId, players.dict[playersTurnId].nickname, players.nextColor());
-            });
-
-            socket.on("claimed_stick", (tryingOwnerId, stickId) => {
-                let gameArea = Game_MODULE.gameArea;
-                let stick = gameArea.sticks[stickId];
-                stick.claimStick(Game_MODULE.gameArea.playersTurn, null);
-                for (let i = 0; i < stick.neighbouringSquares.length; i += 1) {
-                    // Trying to claim surrounding squares which get claimed if all the sticks surrounding them are active
-                    stick.neighbouringSquares[i].claimSquare(gameArea.playersTurn);
-                }
-            });
-        });
+            socket.on("player_disconnected", alertedPlayerDisconnected);
+            socket.on("players_turn", alertedPlayersTurn);
+            socket.on("claimed_stick", alertedClaimedStick);
+        };
+        
+        socket.on("new_player", alertedNewPlayer);
+        socket.on("start_game", alertedStartGame);
     };
-
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     players = {
-        dict: {},
-        availableColors: ["blue", "red", "green", "yellow"],
+        dict: new Map(),
+        availableColors: ["blue", "red", "lime", "yellow"],
         colorCount: 0,
         add: function (id, nickname)
         {
-            this.dict[id] = {nickname: nickname};
+            players.dict.set(id, {
+                nickname: nickname
+            });
         },
+        /**
+         * Remove a player from the dictionary by id
+         * @param {String} id Id of the player being removed
+         */
         remove: function (id)
         {
-            if (Object.prototype.hasOwnProperty.call(this.dict, id))
-                delete this.dict[id];
+            if (players.dict.has(id))
+                players.dict.delete(id);
         },
-        nextColor: function()
+        /**
+         * Returns the next color in the available colors list
+         * @param {number} playersNum Number of players in the game
+         * @returns {String}
+         */
+        nextColor: function(playersNum)
         {
-            let color = this.availableColors[this.colorCount];
-            this.colorCount++;
-            if (this.colorCount === this.availableColors.length)
-                this.colorCount = 0;
+            /**
+             * Color to be returned by the function
+             * @type {String}
+             */
+            let color = players.availableColors[players.colorCount];
+            players.colorCount++;
+            if (players.colorCount === playersNum || players.colorCount === players.availableColors.length)
+                players.colorCount = 0;
             return color;
         }
     };
@@ -105,13 +198,9 @@
     createSocket = function () {
         console.group("Connection details");
         socket = io();
-        // Set event listener
-        socket.on("connect", function() {
-            startExchangeWithServer();
-        });
-        socket.on("terminate", function () {
-            resetPage();
-        });
+        // Set event listeners
+        socket.on("connect", startExchangeWithServer);
+        socket.on("terminate", resetPage);
     };
 
     startExchangeWithServer = function ()
@@ -120,13 +209,13 @@
 
         if (Form_MODULE.formVariables.gameopt === "create")
         {
-            players.add(socket.id, Form_MODULE.formVariables.nickName.value);
+            players.add(socket.id, Form_MODULE.formVariables.nickname.value);
 
             // Requesting server to create a new game
             socket.emit("create_request", {
                 XSize: Form_MODULE.formVariables.xSize.value,
                 YSize: Form_MODULE.formVariables.ySize.value,
-                ownerNickname: Form_MODULE.formVariables.nickName.value,
+                ownerNickname: Form_MODULE.formVariables.nickname.value,
                 expectedPlayers: Form_MODULE.formVariables.playernum.value
             });
 
@@ -162,7 +251,7 @@
             // Requesting server to join an existing game of index entered in the form
             socket.emit("join_request", {
                 gameIndex: Form_MODULE.formVariables.gameIndex.value,
-                nickname: Form_MODULE.formVariables.nickName.value
+                nickname: Form_MODULE.formVariables.nickname.value
             });
 
             console.log("Joining game with index " + Form_MODULE.formVariables.gameIndex.value);
@@ -170,6 +259,7 @@
             // While joining this displays a "joining" message
             var displayedMessage = { message: document.createElement("h1") };
             displayedMessage.message.innerHTML = "Joining";
+            displayedMessage.message.style.textAlign = "center";
             displayedMessage.message.id = "displayedMessage";
 
             document.body.appendChild(displayedMessage.message);
@@ -185,11 +275,12 @@
             socket.on("join_success", (gameInfo) => {
                 socket.XSize = gameInfo.XSize;
                 socket.YSize = gameInfo.YSize;
-                players.dict = gameInfo.playerdict;
+                players.dict = new Map(Object.entries(gameInfo.playerdict));
+
                 displayedMessage.message.innerHTML = "Waiting for other players to join";
 
                 console.log("Joined game with index " + Form_MODULE.formVariables.gameIndex.value);
-                console.log("Number of players: " + Object.keys(gameInfo.playerdict).length);
+                console.log("Number of players: " + gameInfo.playerdict.size);
                 waitForPlayers();
             });
         }

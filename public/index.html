@@ -2,15 +2,15 @@
 <html>
     <head>
         <title>Pipopipette</title>
-        <link rel="icon" type="image/png" href="./public/assets/favicon.ico">
-        <link rel="stylesheet" type="text/css" href="public/stylesheet.css">
+        <link rel="icon" type="image/png" href="favicon.ico">
+        <link rel="stylesheet" type="text/css" href="stylesheet.css">
         <script src="socket.io/socket.io.js"></script>
     </head>
     <body>
         <div id="submitDiv">
             <form id="gameForm">
-                <label for="nickName">Your nickname:</label><br>
-                <input type="text" id="nickName" autofocus autocomplete="off"><br>
+                <label for="nickname">Your nickname:</label><br>
+                <input type="text" id="nickname" autofocus autocomplete="off"><br>
 
                 <input type="radio" id="create" name="gameopt" value="create" checked>
                 <label for="create">Create game</label>
@@ -42,15 +42,15 @@
                 <h2 id="joinFailedMessage" class="hidden" style="color: red;"></h2>
             </form>
         </div>
-        <script src="public/gameLogic/CollisionBox.js"></script>
-        <script src="public/gameLogic/GameComponent.js"></script> 
-        <script src="public/gameLogic/Stick.js"></script>
-        <script src="public/gameLogic/WallSegment.js"></script>
-        <script src="public/gameLogic/Square.js"></script>
-        <script src="public/gameLogic/loadTextures.js"></script>
-        <script src="public/gameLogic/gameArea.js"></script>
-        <script src="public/gameLogic/gameLogic.js"></script>
-        <script src="public/formLogic.js"></script>
-        <script src="public/client.js"></script>
+        <script src="gameLogic/CollisionBox.js"></script>
+        <script src="gameLogic/GameComponent.js"></script> 
+        <script src="gameLogic/Stick.js"></script>
+        <script src="gameLogic/WallSegment.js"></script>
+        <script src="gameLogic/Square.js"></script>
+        <script src="gameLogic/loadTextures.js"></script>
+        <script src="gameLogic/gameArea.js"></script>
+        <script src="gameLogic/gameLogic.js"></script>
+        <script src="formLogic.js"></script>
+        <script src="client.js"></script>
     </body>
 </html>

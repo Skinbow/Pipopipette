@@ -5,7 +5,7 @@ var Form_MODULE = (function () {
         // Private methods
         let checkIfValidInput;
 
-        this.nickName = document.getElementById("nickName"),
+        this.nickname = document.getElementById("nickname"),
         this.radioCreate = document.getElementById("create"),
         this.radioJoin = document.getElementById("join"),
         this.gameopt = "create",
@@ -68,7 +68,7 @@ var Form_MODULE = (function () {
 
         // Checks if entered data is valid
         checkIfValidInput = function(formVariables) {
-            if (formVariables.nickName.value.length > 0 && parseInt(formVariables.xSize.value) > 1 && parseInt(formVariables.ySize.value) > 1)
+            if (formVariables.nickname.value.length > 0 && parseInt(formVariables.xSize.value) > 1 && parseInt(formVariables.ySize.value) > 1)
             {
                 if (formVariables.gameopt === "create")
                 {

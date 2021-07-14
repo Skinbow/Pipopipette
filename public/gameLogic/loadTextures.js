@@ -7,7 +7,7 @@ Game_MODULE = (function (Game_MODULE) {
 
     // Textures imported from Assets folder for the "stick" type GameComponents
     stickTextures = {
-        types: ["IDLE", "hover", "yellow", "blue", "red", "green"],
+        types: ["IDLE", "hover", "yellow", "blue", "red", "lime"],
         horizontal: [],
         vertical: [],
 
@@ -20,11 +20,11 @@ Game_MODULE = (function (Game_MODULE) {
             // Creating images with given source paths
             for (let type of this.types) {
                 tempImg = new Image();
-                tempImg.src = "./public/assets/StickTextures/" + type + "/StickHorizontal.png";
+                tempImg.src = "./assets/StickTextures/" + type + "/StickHorizontal.png";
                 this["horizontal"][type] = tempImg;
 
                 tempImg = new Image();
-                tempImg.src = "./public/assets/StickTextures/" + type + "/StickVertical.png";
+                tempImg.src = "./assets/StickTextures/" + type + "/StickVertical.png";
                 this["vertical"][type] = tempImg;
             }
             Game_MODULE.stickTexturesInitiated = true;
@@ -33,10 +33,10 @@ Game_MODULE = (function (Game_MODULE) {
 
     // Textures imported from Assets folder for the "wall segment" type GameComponents
     wallTextures = {
-        top: "./public/assets/WallTextures/WallTop.png",
-        left: "./public/assets/WallTextures/WallLeft.png",
-        bottom: "./public/assets/WallTextures/WallBottom.png",
-        right: "./public/assets/WallTextures/WallRight.png",
+        top: "./assets/WallTextures/WallTop.png",
+        left: "./assets/WallTextures/WallLeft.png",
+        bottom: "./assets/WallTextures/WallBottom.png",
+        right: "./assets/WallTextures/WallRight.png",
 
         // Method used to extract images from paths
         init: function () {
