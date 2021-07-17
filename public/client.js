@@ -86,8 +86,9 @@
          * @param {String} playerInfo.nickname Nickname of the new player
          */
         const alertedNewPlayer = (playerInfo) => {
-            console.log(playerInfo.nickname + " is joining the game!");
-            players.add(playerInfo.id, playerInfo.nickname);
+            const { id, nickname } = playerInfo;
+            console.log(nickname + " is joining the game!");
+            players.add(id, nickname);
             console.log(players.dict.size + " players have joined this game.");
         };
 
@@ -266,21 +267,29 @@
 
             // When player fails to join,
             socket.on("join_failure", (reason) => {
+                resetPage();
                 Form_MODULE.formVariables.joinFailedMessage.innerHTML = reason;
                 Form_MODULE.formVariables.joinFailedMessage.style.display = "block";
-                resetPage();
             });
 
             // When player successfully joins, displays a message as well as the index of the game the player is joining
             socket.on("join_success", (gameInfo) => {
-                socket.XSize = gameInfo.XSize;
-                socket.YSize = gameInfo.YSize;
-                players.dict = new Map(Object.entries(gameInfo.playerdict));
+                const {
+                    XSize,
+                    YSize,
+                    playerdict,
+                    // expectedPlayers,
+                    // playersTurnIndex,
+                    // playersIdsList
+                } = gameInfo;
+                socket.XSize = XSize;
+                socket.YSize = YSize;
+                players.dict = new Map(Object.entries(playerdict));
 
                 displayedMessage.message.innerHTML = "Waiting for other players to join";
 
                 console.log("Joined game with index " + Form_MODULE.formVariables.gameIndex.value);
-                console.log("Number of players: " + gameInfo.playerdict.size);
+                console.log("Number of players: " + playerdict.size);
                 waitForPlayers();
             });
         }

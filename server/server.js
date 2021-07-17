@@ -8,9 +8,12 @@ const {
     deleteGame,
     getGame,
     gameExists,
+    gameIsFull,
+    gameIsEmpty,
     addPlayer,
     removePlayer,
-    nextPlayersTurn
+    nextPlayersTurn,
+    initShuffledPlayersIds
 } = require("./gameRooms");
 
 var app = express();
@@ -23,12 +26,45 @@ app.get("/", (req, res) => {
 });
 app.use(express.static(path.resolve("public")));
 
+function checkIfValidJoin(socket, gameIndex) {
+    // Game does not exist
+    if (!(gameExists(gameIndex)))
+    {
+        socket.emit("join_failure", "Game index not found!");
+        console.log("Requested game index " + gameIndex + " does not exist!");
+        return false;
+    }
+
+    // All players have already joined
+    if (gameIsFull(gameIndex))
+    {
+        socket.emit("join_failure", "Too many players at game index!");
+        console.log("Too many players at game index " + gameIndex + "!");
+        return false;
+    }
+
+    return true;
+}
+
+function sendGameInfo(socket, gameIndex) {
+    // The game the user wants to join
+    let requestedGame = getGame(gameIndex);
+
+    // In es6 Map objects can not yet be JSON-encoded to be sent through a socket
+    let gameInfoToSend = JSON.parse(JSON.stringify(requestedGame));
+    gameInfoToSend.playerdict = Object.fromEntries(requestedGame.playerdict.entries());
+
+    // Send confirmation to client
+    socket.emit("join_success", gameInfoToSend);
+    console.log("There are " + requestedGame.playerdict.size + " users connected to game with index " + gameIndex);
+}
+
 function broadcastPlayersTurn(gameIndex, playersTurnIndex) {
     const game = getGame(gameIndex);
-    const playersTurnSocketId = Array.from(game.playerdict.keys())[playersTurnIndex];
+    const playersTurnSocketId = game.playersIdsList[playersTurnIndex];
     
     io.to(gameIndex).emit("players_turn", playersTurnSocketId);
-    console.log("Broadcast to everyone that it's the turn of " + game.playerdict.get(playersTurnSocketId).nickname);
+    // console.log("Broadcast to everyone that it's the turn of " + game.playerdict.get(playersTurnSocketId).nickname);
 }
 
 io.on("connection", (socket) => {
@@ -36,14 +72,18 @@ io.on("connection", (socket) => {
 
     // Socket recieving a request to create a new game
     socket.on("create_request", (createInfo) => {
+        const {
+            XSize,
+            YSize,
+            ownerNickname,
+            expectedPlayers
+        } = createInfo;
+
         // Creates a new game with board size of XSize and YSize and a certain number of players
-        let gameIndex = createGame(createInfo.XSize, createInfo.YSize, createInfo.expectedPlayers);
+        let gameIndex = createGame(XSize, YSize, expectedPlayers);
 
         // Adds player that created the game to the game
-        addPlayer(socket, gameIndex, {
-            id: socket.id,
-            nickname: createInfo.ownerNickname
-        });
+        addPlayer(socket, gameIndex, ownerNickname);
 
         // Send confirmation to client
         socket.emit("create_success", gameIndex);
@@ -52,58 +92,38 @@ io.on("connection", (socket) => {
 
     // Socket recieving request to join an existing game
     socket.on("join_request", (joinInfo) => {
-        // Game does not exist
-        if (!(gameExists(joinInfo.gameIndex)))
-        {
-            socket.emit("join_failure", "Game index not found!");
-            console.log("Requested game index " + joinInfo.gameIndex + " does not exist!");
-            return;
-        }
-
-        // The game the user wants to join
-        let requestedGame = getGame(joinInfo.gameIndex);
-        // Gets the ids of players already in the game
-        let ids = requestedGame.playerdict.keys();
-
-        // All players have already joined
-        if (ids.length >= requestedGame.expectedPlayers)
-        {
-            socket.emit("join_failure", "Too many players at game index!");
-            console.log("Too many players at game index " + joinInfo.gameIndex + "!");
-            return;
-        }
+        const {
+            gameIndex,
+            nickname
+        } = joinInfo;
+        
+        if (!(checkIfValidJoin(socket, gameIndex))) return;
 
         // Adds joining player to requested game
-        addPlayer(socket, joinInfo.gameIndex, {
-            id: socket.id,
-            nickname: joinInfo.nickname
-        });
+        addPlayer(socket, gameIndex, nickname);
+        // Sends game info to the new player
+        sendGameInfo(socket, gameIndex);
 
-        // In es6 Map objects can not yet be JSON-encoded to be sent through a socket
-        let gameInfoToSend = JSON.parse(JSON.stringify(requestedGame));
-        gameInfoToSend.playerdict = Object.fromEntries(requestedGame.playerdict.entries());
-
-        // Send confirmation to client
-        socket.emit("join_success", gameInfoToSend);
-
-        console.log("There are " + requestedGame.playerdict.size + " users connected to game with index " + joinInfo.gameIndex);
-        
         // Notify everyone other than the player who joined that a player joined
         socket.to(socket.gameIndex).emit("new_player", {
             id: socket.id,
-            nickname: joinInfo.nickname
+            nickname: nickname
         });
         console.log("Telling the room " + socket.gameIndex + " that the player with id " + socket.id + " has joined.");
 
-        if (requestedGame.playerdict.size == requestedGame.expectedPlayers)
+        if (gameIsFull(gameIndex))
         {
             io.to(socket.gameIndex).emit("start_game");
+
+            initShuffledPlayersIds(socket.gameIndex);
             broadcastPlayersTurn(socket.gameIndex, 0);
         }
     });
 
     socket.on("claimed_stick", (stickId) => {
+        // Broadcast claimed stick
         socket.to(socket.gameIndex).emit("claimed_stick", stickId);
+        // Broadcast player's turn
         broadcastPlayersTurn(socket.gameIndex, nextPlayersTurn(socket.gameIndex));
     });
 
@@ -114,17 +134,17 @@ io.on("connection", (socket) => {
         let gameIndex = socket.gameIndex;
         if (gameExists(gameIndex))
         {
-            // The game the user left
-            let gameLeft = getGame(gameIndex);
-            if (gameLeft.playerdict.size >= gameLeft.expectedPlayers)
+            // When the game was full, there is no other choice but to delete the game
+            if (gameIsFull(gameIndex))
             {
                 io.to(gameIndex).emit("player_disconnected", socket.id);
                 deleteGame(gameIndex);
             }
+            // When the game is not full, we can just remove the disconnected player
             else
             {
                 removePlayer(gameIndex, socket.id);
-                if (gameLeft.playerdict.size === 0) {
+                if (gameIsEmpty(gameIndex)) {
                     deleteGame(gameIndex);
                 }
             }

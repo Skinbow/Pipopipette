@@ -1,18 +1,13 @@
 /**
- * Dictionary of players in a game
- * @typedef playerdictType
- * @type {Map<String, {nickname: String}>}
- */
-
-/**
  * The structure of every game as it is saved on the server
  * @typedef gameType
  * @type {Object}
  * @property {number} XSize X size of the board in number of lines
  * @property {number} YSize Y size of the board in number of lines
- * @property {playerdictType} playerdict Dictionary of players in the game
+ * @property {Map<String, {nickname: String}>} playerdict Dictionary of players in the game
  * @property {number} expectedPlayers Number of players expected in the game
  * @property {number} playersTurnIndex Index of the player whose turn it is
+ * @property {String[]} playersIdsList List of shuffled players ids to determine play order
  */
 
 /**
@@ -50,7 +45,8 @@ function createGame(BoardX, BoardY, playerNum)
         YSize: BoardY,
         playerdict: new Map(),
         expectedPlayers: playerNum,
-        playersTurnIndex: 0
+        playersTurnIndex: 0,
+        playersIdsList: []
     };
 
     games.set(gameIndex, game);
@@ -89,15 +85,37 @@ function gameExists(gameIndex)
 }
 
 /**
+ * Checks if the game is full
+ * @param {String} gameIndex 
+ * @returns {boolean}
+ */
+function gameIsFull(gameIndex) {
+    const game = getGame(gameIndex);
+    console.assert(game.playerdict.size <= game.expectedPlayers, "More players than possible are connected");
+    return (game.playerdict.size == game.expectedPlayers);
+}
+
+/**
+ * Checks if the game is empty
+ * @param {String} gameIndex 
+ * @returns {boolean}
+ */
+function gameIsEmpty(gameIndex) {
+    const game = getGame(gameIndex);
+    console.assert(game.playerdict.size <= game.expectedPlayers, "More players than possible are connected");
+    return (game.playerdict.size == 0);
+}
+
+/**
  * Adds a new player to the game with the set index
  * @param {Object} socket 
  * @param {String} gameIndex 
- * @param {{id: String, nickname: String}} playerInfo 
+ * @param {String} playerNickname
  */
-function addPlayer(socket, gameIndex, playerInfo)
+function addPlayer(socket, gameIndex, playerNickname)
 {
-    getGame(gameIndex).playerdict.set(playerInfo.id, {
-        nickname: playerInfo.nickname
+    getGame(gameIndex).playerdict.set(socket.id, {
+        nickname: playerNickname
     });
     // Join the associated room
     socket.gameIndex = gameIndex;
@@ -132,7 +150,7 @@ function nextPlayersTurn(gameIndex)
  * Gets and saves the players' sockets to a list inside the game object in the games map
  * @param {String} gameIndex 
  */
-function getPlayersSockets(gameIndex)
+function initShuffledPlayersIds(gameIndex)
 {
     /**
      * Shuffles an array
@@ -155,8 +173,12 @@ function getPlayersSockets(gameIndex)
         return array;
     };
 
+    // Initialising playersIdsList
+    let game = getGame(gameIndex);
+    game.playersIdsList = Array.from(game.playerdict.keys());
+
     // Shuffling to determine playing order
-    // shuffle(game.playerSockets);
+    shuffle(game.playersIdsList);
 }
 
 module.exports = {
@@ -164,7 +186,10 @@ module.exports = {
     deleteGame,
     getGame,
     gameExists,
+    gameIsFull,
+    gameIsEmpty,
     addPlayer,
     removePlayer,
-    nextPlayersTurn
+    nextPlayersTurn,
+    initShuffledPlayersIds
 };
