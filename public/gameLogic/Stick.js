@@ -36,10 +36,19 @@ Game_MODULE = (function (Game_MODULE) {
             // Active if mouse was hovering over this stick only and the left mouse button was released
             if (this.collisionBox.collidesWithPoint(mouseState.mouseReleaseLocation.x, mouseState.mouseReleaseLocation.y) && mouseState.mouseReleaseLocation.recently && this.hover && myTurn) {
                 mouseState.mouseReleaseLocation.recently = false;
-                this.claimStick(gameArea.playersTurn, stickClaimAlertFunction);
-                for (let i = 0; i < this.neighbouringSquares.length; i += 1) {
-                    // Trying to claim surrounding squares which get claimed if all the sticks surrounding them are active
-                    this.neighbouringSquares[i].claimSquare(gameArea.playersTurn);
+                const stickClaimed = this.claimStick(gameArea.playersTurn);
+                if (stickClaimed)
+                {
+                    let squaresClaimed = 0;
+                    for (let i = 0; i < this.neighbouringSquares.length; i += 1) {
+                        // Trying to claim surrounding squares which get claimed if all the sticks surrounding them are active
+                        if (this.neighbouringSquares[i].claimSquare(gameArea.playersTurn))
+                        {
+                            squaresClaimed++;
+                            console.log("Claimed squares: " + squaresClaimed.toString());
+                        }
+                    }
+                    stickClaimAlertFunction(this.id, squaresClaimed);
                 }
             }
             this.display(gameArea.context, stickTextures);
@@ -92,17 +101,17 @@ Game_MODULE = (function (Game_MODULE) {
         }
 
         // Attempt to claim stick
-        claimStick (tryingOwner, stickClaimAlertFunction) {
+        claimStick (tryingOwner) {
             // If stick already belongs to someone
             if (!this.isActive()) {
                 // If stick touches an active stick or a wall segment
                 if (this.checkIfNeighboursAllowColoration()) {
                     this.owner = tryingOwner;
                     console.log("Stick claimed by " + tryingOwner.nickname + " with the color " + tryingOwner.color);
-                    if (stickClaimAlertFunction !== null)
-                        stickClaimAlertFunction(this.id);
+                    return true;
                 }
             }
+            return false;
         }
 
         // Checks if stick touches an active stick or a wall segment

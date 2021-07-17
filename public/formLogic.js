@@ -54,7 +54,6 @@ var Form_MODULE = (function () {
         {
             const previousFormVariables = JSON.parse(previousFormVariablesStringified);
             formVariables.nickname.value = previousFormVariables.nickname;
-            sessionStorage.removeItem("form_variables");
         }
 
         let self = formVariables;
@@ -78,7 +77,7 @@ var Form_MODULE = (function () {
                 sessionStorage.setItem("form_variables", JSON.stringify(extractFormInfo()));
                 // Hide form
                 self.submitDiv.classList.add("hidden");
-                window.location.replace("game.html");
+                window.location.href = "game.html";
             }
         };
     }

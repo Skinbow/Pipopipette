@@ -12,7 +12,8 @@ Game_MODULE = (function (Game_MODULE) {
         this.wallSegments = [],
         this.squares = [],
         this.playersTurn = {},
-        this.myTurn = false;
+        this.myTurn = false,
+        this.exists = false;
 
         // Function that initialises everything
         this.setupCanvas = function (xSize, ySize) {
@@ -34,6 +35,8 @@ Game_MODULE = (function (Game_MODULE) {
 
             findStickNeighbours(this);
             findSquareNeigbours(this);
+
+            this.exists = true;
         };
 
         // Clears the canvas
@@ -43,8 +46,13 @@ Game_MODULE = (function (Game_MODULE) {
 
         // Destroys the canvas and cancles the canvas's hs
         this.destroy = function () {
-            clearInterval(this.updateInterval);
-            this.canvas.remove();
+            if (this.exists)
+            {
+                clearInterval(this.updateInterval);
+                document.body.removeChild(this.canvas);
+                this.canvas.remove();
+                this.exists = false;
+            }
         };
 
         this.setPlayersTurn = function (myId, playerId, playerNickname, playerColor)

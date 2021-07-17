@@ -68,7 +68,8 @@
         // formVariables.reset();
         
         // formVariables.submitDiv.classList.remove("hidden");
-        document.location.replace("index.html");
+        Game_MODULE.gameArea.destroy();
+        window.location.href = "index.html";
     };
 
     clearWaitingMessages = function () {
@@ -100,9 +101,8 @@
          * @param {String} id Id of the disconnected player
          */
         const alertedPlayerDisconnected = (id) => {
-            alert("Player " + players.dict.get(id).nickname + " disconnected!");
-            Game_MODULE.gameArea.destroy();
             resetPage();
+            //alert("Player " + players.dict.get(id).nickname + " disconnected!");
         };
 
         /**
@@ -122,7 +122,7 @@
         const alertedClaimedStick = (stickId) => {
             let gameArea = Game_MODULE.gameArea;
             let stick = gameArea.sticks[stickId];
-            stick.claimStick(Game_MODULE.gameArea.playersTurn, null);
+            stick.claimStick(Game_MODULE.gameArea.playersTurn);
             for (let i = 0; i < stick.neighbouringSquares.length; i += 1) {
                 // Trying to claim surrounding squares which get claimed if all the sticks surrounding them are active
                 stick.neighbouringSquares[i].claimSquare(gameArea.playersTurn);
@@ -148,12 +148,33 @@
              * @param {String} myId Id of the player who claimed the stick, that is this player
              * @param {number} stickId Id of the stick that was claimed
              */
-            const stickClaimAlertFunction = (stickId) => { socket.emit("claimed_stick", stickId); };
+            const stickClaimAlertFunction = (stickId, squaresClaimed) => { socket.emit("claimed_stick", stickId, squaresClaimed); };
             Game_MODULE.startGame(socket.XSize, socket.YSize, stickClaimAlertFunction);
             
             socket.on("player_disconnected", alertedPlayerDisconnected);
             socket.on("players_turn", alertedPlayersTurn);
             socket.on("claimed_stick", alertedClaimedStick);
+            socket.on("game_finished", (scoreboard) =>
+            {
+                scoreboard = JSON.parse(scoreboard);
+                console.log(scoreboard);
+                Game_MODULE.gameArea.destroy();
+                let scoresList = document.createElement("ul");
+                for (let entry of scoreboard)
+                {
+                    console.log(entry);
+                    let key = players.dict.get(entry[0]).nickname;
+                    let scoreEntry = document.createElement("li");
+                    scoreEntry.innerHTML = "<h2>" + key + "</h2><h3>" + entry[1] + "</h3>";
+                    scoresList.appendChild(scoreEntry);
+                }
+                document.body.appendChild(scoresList);
+                
+                let goBackButton = document.createElement("button");
+                goBackButton.innerHTML = "Return to main page";
+                goBackButton.onclick = resetPage;
+                document.body.appendChild(goBackButton);
+            });
         };
         
         socket.on("new_player", alertedNewPlayer);
@@ -270,10 +291,14 @@
                 DisplayedMessage_MODULE.displayWaitingMessage("Waiting for other players to join", "This game's index is " + formVariables.gameIndex);
 
                 console.log("Joined game with index " + formVariables.gameIndex);
-                console.log("Number of players: " + playerdict.size);
+                console.log("Number of players: " + players.dict.size);
                 waitForPlayers();
             });
         }
     };
     window.onload = createSocket;
+    window.onbeforeunload = (event) => {
+        event.preventDefault();
+        resetPage();
+    };
 })();

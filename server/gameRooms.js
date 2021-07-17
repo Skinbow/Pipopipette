@@ -8,6 +8,7 @@
  * @property {number} expectedPlayers Number of players expected in the game
  * @property {number} playersTurnIndex Index of the player whose turn it is
  * @property {String[]} playersIdsList List of shuffled players ids to determine play order
+ * @property {number[]} playersScores List of scores of the players
  */
 
 /**
@@ -27,7 +28,7 @@ function generateGameIndex()
     {
         tryIndex = (Math.floor(Math.random() * 10)).toString();
     } while (games.has(tryIndex));
-    return tryIndex;
+    return "0";//tryIndex;
 }
 
 /**
@@ -46,7 +47,8 @@ function createGame(BoardX, BoardY, playerNum)
         playerdict: new Map(),
         expectedPlayers: playerNum,
         playersTurnIndex: 0,
-        playersIdsList: []
+        playersIdsList: [],
+        playersScores: []
     };
 
     games.set(gameIndex, game);
@@ -136,7 +138,7 @@ function removePlayer(gameIndex, playerId)
 /**
  * Sets the player's turn index to the next player's index
  * @param {String} gameIndex 
- * @returns {number} The index of the player whose turn it is
+ * @returns {number} The index of the player whose turn it is after it's incremented
  */
 function nextPlayersTurn(gameIndex)
 {
@@ -144,6 +146,59 @@ function nextPlayersTurn(gameIndex)
     if (++game.playersTurnIndex >= game.expectedPlayers)
         game.playersTurnIndex = 0;
     return game.playersTurnIndex;
+}
+
+/**
+ * Gets the index of the player whose turn it is
+ * @param {String} gameIndex 
+ * @returns {number} The index of the player whose turn it is
+ */
+function getPlayersTurn(gameIndex) {
+    return getGame(gameIndex).playersTurnIndex;
+}
+
+/**
+ * Adds to the score of a player
+ * @param {String} gameIndex 
+ * @param {number} playerIndex The index of the player whose score has to be increased
+ * @param {number} toAdd Number of points to add
+ */
+function addToScore(gameIndex, playerIndex, toAdd) {
+    let game = getGame(gameIndex);
+    game.playersScores[playerIndex] += toAdd;
+}
+
+/**
+ * Returns sorted by values Object with socket.ids and scores
+ * @param {String} gameIndex 
+ */
+function getScoreboard(gameIndex) {
+    const buildMap = (keys, values) => {
+        let map = new Map();
+        for(let i = 0; i < keys.length; i++){
+            map.set(keys[i], values[i]);
+        }
+        return map;
+    };
+
+    const game = getGame(gameIndex);
+    let scoreboard = buildMap(game.playersIdsList, game.playersScores);
+    scoreboard[Symbol.iterator] = function* () {
+        yield* [...this.entries()].sort((a, b) => a[1] - b[1]);
+    };
+
+    // Sorting by score
+    return [...scoreboard];
+}
+
+/**
+ * Returns whether the game is finished
+ * @param {String} gameIndex 
+ * @returns {boolean}
+ */
+function gameIsFinished(gameIndex) {
+    const game = getGame(gameIndex);
+    return game.playersScores.reduce((a, b) => a + b, 0) == game.XSize * game.YSize;
 }
 
 /**
@@ -177,6 +232,11 @@ function initShuffledPlayersIds(gameIndex)
     let game = getGame(gameIndex);
     game.playersIdsList = Array.from(game.playerdict.keys());
 
+    for (let i = 0; i < game.playersIdsList.length; i++)
+    {
+        game.playersScores.push(0);
+    }
+
     // Shuffling to determine playing order
     shuffle(game.playersIdsList);
 }
@@ -191,5 +251,9 @@ module.exports = {
     addPlayer,
     removePlayer,
     nextPlayersTurn,
+    getPlayersTurn,
+    addToScore,
+    getScoreboard,
+    gameIsFinished,
     initShuffledPlayersIds
 };

@@ -25,8 +25,10 @@ Game_MODULE = (function (Game_MODULE) {
                 if (this.checkIfAllSurroundingSticksActive()) {
                     this.owner = tryingOwner;
                     console.log("Square claimed by " + Game_MODULE.gameArea.playersTurn.nickname + " with the color " + Game_MODULE.gameArea.playersTurn.color);
+                    return true;
                 }
             }
+            return false;
         }
 
         // Checking if all of the square"s neighbours are active

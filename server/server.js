@@ -13,6 +13,10 @@ const {
     addPlayer,
     removePlayer,
     nextPlayersTurn,
+    getPlayersTurn,
+    addToScore,
+    getScoreboard,
+    gameIsFinished,
     initShuffledPlayersIds
 } = require("./gameRooms");
 
@@ -80,7 +84,7 @@ io.on("connection", (socket) => {
         } = createInfo;
 
         // Creates a new game with board size of XSize and YSize and a certain number of players
-        let gameIndex = createGame(XSize, YSize, expectedPlayers);
+        let gameIndex = createGame(parseInt(XSize), parseInt(YSize), parseInt(expectedPlayers));
 
         // Adds player that created the game to the game
         addPlayer(socket, gameIndex, ownerNickname);
@@ -116,13 +120,21 @@ io.on("connection", (socket) => {
             io.to(socket.gameIndex).emit("start_game");
 
             initShuffledPlayersIds(socket.gameIndex);
-            broadcastPlayersTurn(socket.gameIndex, 0);
+            broadcastPlayersTurn(socket.gameIndex, getPlayersTurn(socket.gameIndex));
         }
     });
 
-    socket.on("claimed_stick", (stickId) => {
+    socket.on("claimed_stick", (stickId, squaresClaimed) => {
         // Broadcast claimed stick
         socket.to(socket.gameIndex).emit("claimed_stick", stickId);
+
+        addToScore(socket.gameIndex, getPlayersTurn(socket.gameIndex), parseInt(squaresClaimed));
+        if (gameIsFinished(socket.gameIndex))
+        {
+            let scoreboard = getScoreboard(socket.gameIndex);
+            console.table(scoreboard);
+            io.to(socket.gameIndex).emit("game_finished", JSON.stringify(scoreboard));
+        }
         // Broadcast player's turn
         broadcastPlayersTurn(socket.gameIndex, nextPlayersTurn(socket.gameIndex));
     });
