@@ -4,11 +4,11 @@
         <title>Pipopipette</title>
         <link rel="icon" type="image/png" href="favicon.ico">
         <link rel="stylesheet" type="text/css" href="stylesheet.css">
-        <script src="socket.io/socket.io.js"></script>
+        <script async src="formLogic.js"></script>
     </head>
     <body>
         <div id="submitDiv">
-            <form id="gameForm" action="game.html">
+            <form id="gameForm">
                 <label for="nickname">Your nickname:</label><br>
                 <input type="text" id="nickname" name="nickname" placeholder="Guest" autofocus autocomplete="off"><br>
 
@@ -42,16 +42,5 @@
                 <h2 id="joinFailedMessage" class="hidden" style="color: red;"></h2>
             </form>
         </div>
-        <script src="gameLogic/CollisionBox.js"></script>
-        <script src="gameLogic/GameComponent.js"></script> 
-        <script src="gameLogic/Stick.js"></script>
-        <script src="gameLogic/WallSegment.js"></script>
-        <script src="gameLogic/Square.js"></script>
-        <script src="gameLogic/loadTextures.js"></script>
-        <script src="gameLogic/gameArea.js"></script>
-        <script src="gameLogic/gameLogic.js"></script>
-        <script src="formLogic.js"></script>
-        <script src="displayMessage.js"></script>
-        <script src="client.js"></script>
     </body>
 </html>

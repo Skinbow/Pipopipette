@@ -2,13 +2,19 @@
 <html>
     <head>
         <title>Pipopipette</title>
-        <link rel="icon" type="image/png" href="public/assets/Pipopipette_icon.png">
-        <!--<link rel="stylesheet" type="text/css" href="style.css">-->
-        <script src="localhost:3000/socket.io/socket.io.js"></script>
-        <script>
-            var socket = io();
-        </script>
-        <script src="public/client.js"></script>
+        <link rel="icon" type="image/png" href="favicon.ico">
+        <link rel="stylesheet" type="text/css" href="stylesheet.css">
+        <script defer src="socket.io/socket.io.js"></script>
+        <script defer src="gameLogic/CollisionBox.js"></script>
+        <script defer src="gameLogic/GameComponent.js"></script> 
+        <script defer src="gameLogic/Stick.js"></script>
+        <script defer src="gameLogic/WallSegment.js"></script>
+        <script defer src="gameLogic/Square.js"></script>
+        <script defer src="gameLogic/loadTextures.js"></script>
+        <script defer src="gameLogic/gameArea.js"></script>
+        <script defer src="gameLogic/gameLogic.js"></script>
+        <script defer src="displayMessage.js"></script>
+        <script defer src="client.js"></script>
     </head>
     <body></body>
 </html>

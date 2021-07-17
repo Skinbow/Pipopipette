@@ -11,8 +11,6 @@ var DisplayedMessage_MODULE = (function () {
         shown = false;
 
     function init() {
-        console.log("executing");
-
         displayedMessage.messageDiv.appendChild(displayedMessage.message);
         displayedMessage.messageDiv.appendChild(displayedMessage.gameIndex);
 

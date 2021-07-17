@@ -5,12 +5,20 @@
 [32m[nodemon] starting `node server/server.js`[39m
 Listenting on *:3000
 
-The user with the socket id so7cNfSiVfeTPJdJAAAB connected!
+The user with the socket id Kva8RumaHch5EMpqAAAB connected!
 
-Game with index 5 was successfully created!
-Deleting game with index 5
+Game with index 7 was successfully created!
 
-User with socket id so7cNfSiVfeTPJdJAAAB disconnected!
+The user with the socket id B2fr3PhNBLZDIYB5AAAD connected!
+
+There are 2 users connected to game with index 7
+Telling the room 7 that the player with id B2fr3PhNBLZDIYB5AAAD has joined.
+Deleting game with index 7
+
+User with socket id B2fr3PhNBLZDIYB5AAAD disconnected!
+
+
+User with socket id Kva8RumaHch5EMpqAAAB disconnected!
 
 [32m[nodemon] restarting due to changes...[39m
 [32m[nodemon] starting `node server/server.js`[39m
@@ -19,10 +27,178 @@ Listenting on *:3000
 [32m[nodemon] starting `node server/server.js`[39m
 Listenting on *:3000
 
-The user with the socket id o5Lu9LK8bydrlkFrAAAB connected!
+The user with the socket id I5GmNQEDKYAO89G4AAAB connected!
 
-Game with index 5 was successfully created!
-Deleting game with index 5
+Game with index 9 was successfully created!
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
 
-User with socket id o5Lu9LK8bydrlkFrAAAB disconnected!
+The user with the socket id 7oUly-1IXBH_gyHKAAAB connected!
+
+Game with index 4 was successfully created!
+
+The user with the socket id 1DiVQQXuwyua9z_0AAAD connected!
+
+There are 2 users connected to game with index 4
+Telling the room 4 that the player with id 1DiVQQXuwyua9z_0AAAD has joined.
+
+The user with the socket id zlJp_9v5LbgqANXdAAAF connected!
+
+Too many players at game index 4!
+
+User with socket id zlJp_9v5LbgqANXdAAAF disconnected!
+
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+
+The user with the socket id LgK2TVpQVzlMvqMVAAAB connected!
+
+Requested game index 4 does not exist!
+
+User with socket id LgK2TVpQVzlMvqMVAAAB disconnected!
+
+
+The user with the socket id f2xS73IVH5t0Jxa9AAAD connected!
+
+Game with index 8 was successfully created!
+
+The user with the socket id bm7-7uGbxZJ0DUnNAAAF connected!
+
+There are 2 users connected to game with index 8
+Telling the room 8 that the player with id bm7-7uGbxZJ0DUnNAAAF has joined.
+
+The user with the socket id qUhsRMSIIrYXxO8XAAAH connected!
+
+Requested game index 3 does not exist!
+
+The user with the socket id 7FTjn5GylL8oCpkQAAAJ connected!
+
+Requested game index 3 does not exist!
+
+The user with the socket id s77CNMz2QKbvbIFzAAAL connected!
+
+Requested game index 4 does not exist!
+
+User with socket id s77CNMz2QKbvbIFzAAAL disconnected!
+
+
+The user with the socket id _cwFA7oiol4bCXP4AAAN connected!
+
+Too many players at game index 8!
+
+User with socket id qUhsRMSIIrYXxO8XAAAH disconnected!
+
+
+User with socket id 7FTjn5GylL8oCpkQAAAJ disconnected!
+
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+
+The user with the socket id e_32J9wgQPiT7b7WAAAB connected!
+
+
+The user with the socket id XWlWHktl8jZHMLYOAAAD connected!
+
+
+User with socket id e_32J9wgQPiT7b7WAAAB disconnected!
+
+
+User with socket id XWlWHktl8jZHMLYOAAAD disconnected!
+
+
+The user with the socket id zCFEDcC0C5VuPDxTAAAF connected!
+
+
+The user with the socket id Msc_MXZmAyB4T6tXAAAH connected!
+
+
+The user with the socket id vqSTxsq507J_55OAAAAJ connected!
+
+Game with index 3 was successfully created!
+
+The user with the socket id pNwo2R06sbi4W9PuAAAL connected!
+
+There are 2 users connected to game with index 3
+Telling the room 3 that the player with id pNwo2R06sbi4W9PuAAAL has joined.
+Deleting game with index 3
+
+User with socket id pNwo2R06sbi4W9PuAAAL disconnected!
+
+
+User with socket id vqSTxsq507J_55OAAAAJ disconnected!
+
+
+User with socket id zCFEDcC0C5VuPDxTAAAF disconnected!
+
+
+User with socket id Msc_MXZmAyB4T6tXAAAH disconnected!
+
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+
+The user with the socket id 1Iaf_S1tzrXlzfUPAAAB connected!
+
+Game with index 4 was successfully created!
+
+The user with the socket id 7ZBpW4SJZppYL-nOAAAD connected!
+
+There are 2 users connected to game with index 4
+Telling the room 4 that the player with id 7ZBpW4SJZppYL-nOAAAD has joined.
+Deleting game with index 4
+
+User with socket id 7ZBpW4SJZppYL-nOAAAD disconnected!
+
+
+User with socket id 1Iaf_S1tzrXlzfUPAAAB disconnected!
+
+
+The user with the socket id BLxOD0yxoV_v1k72AAAF connected!
+
+Game with index 3 was successfully created!
+Deleting game with index 3
+
+User with socket id BLxOD0yxoV_v1k72AAAF disconnected!
 

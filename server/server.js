@@ -38,7 +38,7 @@ function checkIfValidJoin(socket, gameIndex) {
     // All players have already joined
     if (gameIsFull(gameIndex))
     {
-        socket.emit("join_failure", "Too many players at game index!");
+        socket.emit("join_failure", "That game is full!");
         console.log("Too many players at game index " + gameIndex + "!");
         return false;
     }

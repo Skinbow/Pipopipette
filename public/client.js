@@ -1,6 +1,8 @@
 "use strict";
 
 (function () {
+    const formVariables = JSON.parse(sessionStorage.getItem("form_variables"));
+
     // Functions
     /** 
      * Make socket emit game creation or game join request
@@ -66,7 +68,7 @@
         // formVariables.reset();
         
         // formVariables.submitDiv.classList.remove("hidden");
-        document.location.reload();
+        document.location.replace("index.html");
     };
 
     clearWaitingMessages = function () {
@@ -208,23 +210,23 @@
     {
         console.log("My socket id is: " + socket.id);
 
-        if (Form_MODULE.formVariables.gameopt === "create")
+        if (formVariables.gameopt === "create")
         {
-            players.add(socket.id, Form_MODULE.formVariables.nickname.value);
+            players.add(socket.id, formVariables.nickname);
 
             // Requesting server to create a new game
             socket.emit("create_request", {
-                XSize: Form_MODULE.formVariables.xSize.value,
-                YSize: Form_MODULE.formVariables.ySize.value,
-                ownerNickname: Form_MODULE.formVariables.nickname.value,
-                expectedPlayers: Form_MODULE.formVariables.playernum.value
+                XSize: formVariables.xSize,
+                YSize: formVariables.ySize,
+                ownerNickname: formVariables.nickname,
+                expectedPlayers: formVariables.playernum
             });
 
             // TODO: add case where game creation fails
             // When server finishes creating new game this displays a message as well as the created game's index
             socket.on("create_success", (gameIndex) => {
-                socket.XSize = Form_MODULE.formVariables.xSize.value;
-                socket.YSize = Form_MODULE.formVariables.ySize.value;
+                socket.XSize = formVariables.xSize;
+                socket.YSize = formVariables.ySize;
 
                 // Display a waiting message
                 DisplayedMessage_MODULE.displayWaitingMessage("Waiting for other players to join", "Your game's index is " + gameIndex.toString());
@@ -232,24 +234,23 @@
                 waitForPlayers();
             });
         }
-        else if (Form_MODULE.formVariables.gameopt === "join")
+        else if (formVariables.gameopt === "join")
         {
             // Requesting server to join an existing game of index entered in the form
             socket.emit("join_request", {
-                gameIndex: Form_MODULE.formVariables.gameIndex.value,
-                nickname: Form_MODULE.formVariables.nickname.value
+                gameIndex: formVariables.gameIndex,
+                nickname: formVariables.nickname
             });
 
-            console.log("Joining game with index " + Form_MODULE.formVariables.gameIndex.value);
+            console.log("Joining game with index " + formVariables.gameIndex);
 
             // While joining this displays a "joining" message
             DisplayedMessage_MODULE.displayWaitingMessage("Joining", null);
 
             // When player fails to join,
             socket.on("join_failure", (reason) => {
+                sessionStorage.setItem("join_failure", reason);
                 resetPage();
-                Form_MODULE.formVariables.joinFailedMessage.innerHTML = reason;
-                Form_MODULE.formVariables.joinFailedMessage.style.display = "block";
             });
 
             // When player successfully joins, displays a message as well as the index of the game the player is joining
@@ -266,13 +267,13 @@
                 socket.YSize = YSize;
                 players.dict = new Map(Object.entries(playerdict));
 
-                DisplayedMessage_MODULE.displayWaitingMessage("Waiting for other players to join", "This game's index is " + Form_MODULE.formVariables.gameIndex.value);
+                DisplayedMessage_MODULE.displayWaitingMessage("Waiting for other players to join", "This game's index is " + formVariables.gameIndex);
 
-                console.log("Joined game with index " + Form_MODULE.formVariables.gameIndex.value);
+                console.log("Joined game with index " + formVariables.gameIndex);
                 console.log("Number of players: " + playerdict.size);
                 waitForPlayers();
             });
         }
     };
-    window.onload = function () { Form_MODULE.formVariables.loadFormLogic(createSocket); };
+    window.onload = createSocket;
 })();
