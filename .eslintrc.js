@@ -6,7 +6,7 @@ module.exports = {
     },
     "extends": "eslint:recommended",
     "parserOptions": {
-        "ecmaVersion": 6
+        "ecmaVersion": 6,
     },
     "rules": {
         "indent": [
@@ -35,6 +35,7 @@ module.exports = {
         "io": "writeable",
         "players": "writeable",
         "Game_MODULE": "writeable",
-        "Form_MODULE": "writeable"
+        "Form_MODULE": "writeable",
+        "DisplayedMessage_MODULE": "readable"
     }
 };

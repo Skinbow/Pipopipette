@@ -157,7 +157,7 @@
         socket.on("new_player", alertedNewPlayer);
         socket.on("start_game", alertedStartGame);
     };
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     players = {
         dict: new Map(),
         availableColors: ["blue", "red", "lime", "yellow"],
@@ -225,24 +225,9 @@
             socket.on("create_success", (gameIndex) => {
                 socket.XSize = Form_MODULE.formVariables.xSize.value;
                 socket.YSize = Form_MODULE.formVariables.ySize.value;
-                var displayedMessage = {
-                    disp: document.createElement("div"),
-                    message: document.createElement("h1"),
-                    gameIndex: document.createElement("h3")
-                };
 
-                displayedMessage.message.innerHTML = "Waiting for other players to join";
-                displayedMessage.message.style.textAlign = "center";
-
-                displayedMessage.gameIndex.innerHTML = "Your game's index is " + gameIndex;
-                displayedMessage.gameIndex.style.textAlign = "center";
-
-                displayedMessage.disp.appendChild(displayedMessage.message);
-                displayedMessage.disp.appendChild(displayedMessage.gameIndex);
-
-                displayedMessage.disp.id = "displayedMessage";
-
-                document.body.appendChild(displayedMessage.disp);
+                // Display a waiting message
+                DisplayedMessage_MODULE.displayWaitingMessage("Waiting for other players to join", "Your game's index is " + gameIndex.toString());
 
                 waitForPlayers();
             });
@@ -258,12 +243,7 @@
             console.log("Joining game with index " + Form_MODULE.formVariables.gameIndex.value);
 
             // While joining this displays a "joining" message
-            var displayedMessage = { message: document.createElement("h1") };
-            displayedMessage.message.innerHTML = "Joining";
-            displayedMessage.message.style.textAlign = "center";
-            displayedMessage.message.id = "displayedMessage";
-
-            document.body.appendChild(displayedMessage.message);
+            DisplayedMessage_MODULE.displayWaitingMessage("Joining", null);
 
             // When player fails to join,
             socket.on("join_failure", (reason) => {
@@ -286,7 +266,7 @@
                 socket.YSize = YSize;
                 players.dict = new Map(Object.entries(playerdict));
 
-                displayedMessage.message.innerHTML = "Waiting for other players to join";
+                DisplayedMessage_MODULE.displayWaitingMessage("Waiting for other players to join", "This game's index is " + Form_MODULE.formVariables.gameIndex.value);
 
                 console.log("Joined game with index " + Form_MODULE.formVariables.gameIndex.value);
                 console.log("Number of players: " + playerdict.size);

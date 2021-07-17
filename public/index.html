@@ -8,9 +8,9 @@
     </head>
     <body>
         <div id="submitDiv">
-            <form id="gameForm">
+            <form id="gameForm" action="game.html">
                 <label for="nickname">Your nickname:</label><br>
-                <input type="text" id="nickname" autofocus autocomplete="off"><br>
+                <input type="text" id="nickname" name="nickname" placeholder="Guest" autofocus autocomplete="off"><br>
 
                 <input type="radio" id="create" name="gameopt" value="create" checked>
                 <label for="create">Create game</label>
@@ -22,18 +22,18 @@
                 <div id="gameCreateDiv">
                     <label for="size">Choose board size:</label>
                     <fieldset id="size">
-                        <input type="number" id="xSize" value="7">
-                        <input type="number" id="ySize" value="7">
+                        <input type="number" id="xSize" name="xSize" value="7">
+                        <input type="number" id="ySize" name="ySize" value="7">
                     </fieldset>
 
                     <label for="playerNum">Number of players:</label>
-                    <input type="number" id="playerNum" value="2">
+                    <input type="number" id="playerNum" name="playerNum" value="2">
                 </div>
 
                 <div id="gameJoinDiv" class="hidden">
                     <label for="gameIndex">Joining address</label>
                     <fieldset id="joinGameIndex">
-                        <input type="number" id="gameIndex">
+                        <input type="number" id="gameIndex" name="gameIndex">
                     </fieldset>
                 </div>
 
@@ -51,6 +51,7 @@
         <script src="gameLogic/gameArea.js"></script>
         <script src="gameLogic/gameLogic.js"></script>
         <script src="formLogic.js"></script>
+        <script src="displayMessage.js"></script>
         <script src="client.js"></script>
     </body>
 </html>
