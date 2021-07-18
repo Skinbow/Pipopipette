@@ -15,7 +15,7 @@ var Form_MODULE = (function () {
         gameJoinDiv: document.getElementById("gameJoinDiv"),
         gameIndex: document.getElementById("gameIndex"),
 
-        submitDiv: document.getElementById("submitDiv"),
+        gameFormDiv: document.getElementById("gameFormDiv"),
         submitButton: document.getElementById("submitButton"),
 
         joinFailedMessage: document.getElementById("joinFailedMessage"),
@@ -76,7 +76,7 @@ var Form_MODULE = (function () {
             {
                 sessionStorage.setItem("form_variables", JSON.stringify(extractFormInfo()));
                 // Hide form
-                self.submitDiv.classList.add("hidden");
+                self.gameFormDiv.classList.add("hidden");
                 window.location.href = "game.html";
             }
         };

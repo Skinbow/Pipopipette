@@ -109,34 +109,39 @@ io.on("connection", (socket) => {
         sendGameInfo(socket, gameIndex);
 
         // Notify everyone other than the player who joined that a player joined
-        socket.to(socket.gameIndex).emit("new_player", {
+        socket.to(gameIndex).emit("new_player", {
             id: socket.id,
             nickname: nickname
         });
-        console.log("Telling the room " + socket.gameIndex + " that the player with id " + socket.id + " has joined.");
+        console.log("Telling the room " + gameIndex + " that the player with id " + socket.id + " has joined.");
 
         if (gameIsFull(gameIndex))
         {
-            io.to(socket.gameIndex).emit("start_game");
+            io.to(gameIndex).emit("start_game");
 
-            initShuffledPlayersIds(socket.gameIndex);
-            broadcastPlayersTurn(socket.gameIndex, getPlayersTurn(socket.gameIndex));
+            initShuffledPlayersIds(gameIndex);
+            broadcastPlayersTurn(gameIndex, getPlayersTurn(gameIndex));
         }
     });
 
     socket.on("claimed_stick", (stickId, squaresClaimed) => {
+        const gameIndex = socket.gameIndex;
         // Broadcast claimed stick
-        socket.to(socket.gameIndex).emit("claimed_stick", stickId);
+        socket.to(gameIndex).emit("claimed_stick", stickId);
 
-        addToScore(socket.gameIndex, getPlayersTurn(socket.gameIndex), parseInt(squaresClaimed));
-        if (gameIsFinished(socket.gameIndex))
+        addToScore(gameIndex, getPlayersTurn(gameIndex), parseInt(squaresClaimed));
+        if (gameIsFinished(gameIndex))
         {
-            let scoreboard = getScoreboard(socket.gameIndex);
+            let scoreboard = getScoreboard(gameIndex);
             console.table(scoreboard);
-            io.to(socket.gameIndex).emit("game_finished", JSON.stringify(scoreboard));
+            io.to(gameIndex).emit("game_finished", JSON.stringify(scoreboard));
+            deleteGame(gameIndex);
         }
-        // Broadcast player's turn
-        broadcastPlayersTurn(socket.gameIndex, nextPlayersTurn(socket.gameIndex));
+        else
+        {
+            // Broadcast player's turn
+            broadcastPlayersTurn(gameIndex, nextPlayersTurn(gameIndex));
+        }
     });
 
     // TODO: make the game get deleted only if it had already started when the user left
@@ -146,18 +151,21 @@ io.on("connection", (socket) => {
         let gameIndex = socket.gameIndex;
         if (gameExists(gameIndex))
         {
-            // When the game was full, there is no other choice but to delete the game
-            if (gameIsFull(gameIndex))
+            if (!gameIsFinished(gameIndex))
             {
-                io.to(gameIndex).emit("player_disconnected", socket.id);
-                deleteGame(gameIndex);
-            }
-            // When the game is not full, we can just remove the disconnected player
-            else
-            {
-                removePlayer(gameIndex, socket.id);
-                if (gameIsEmpty(gameIndex)) {
+                // When the game was full, there is no other choice but to delete the game
+                if (gameIsFull(gameIndex))
+                {
+                    io.to(gameIndex).emit("player_disconnected", socket.id);
                     deleteGame(gameIndex);
+                }
+                // When the game is not full, we can just remove the disconnected player
+                else
+                {
+                    removePlayer(gameIndex, socket.id);
+                    if (gameIsEmpty(gameIndex)) {
+                        deleteGame(gameIndex);
+                    }
                 }
             }
         }

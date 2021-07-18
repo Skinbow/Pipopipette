@@ -67,7 +67,7 @@
         // clearWaitingMessages();
         // formVariables.reset();
         
-        // formVariables.submitDiv.classList.remove("hidden");
+        // formVariables.gameFormDiv.classList.remove("hidden");
         Game_MODULE.gameArea.destroy();
         window.location.href = "index.html";
     };
