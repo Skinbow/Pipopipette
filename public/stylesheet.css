@@ -2,3 +2,290 @@
     display: none;
 }
 
+html, body, #gameSelectionDiv {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    overflow: hidden;
+    position: absolute;
+    background-color: cornsilk;
+    top: 0;
+    left: 0;
+}
+
+h3 {
+    font-size: 3em;
+    font-weight: bolder;
+}
+
+h4 {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+h1, h2, h3, h4 {
+    text-align: center;
+}
+
+fieldset {
+    border: none;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+button {
+    display: block;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input.no-arrows[type="number"]::-webkit-outer-spin-button,
+input.no-arrows[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input.no-arrows[type="number"] {
+    -moz-appearance: textfield;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    opacity: 1;
+}
+
+
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+#nicknameFormDiv {
+    width: calc(500px + 2em);
+    height: calc(250px + 2em);
+
+    background-color: white;
+}
+
+#borderDiv {
+    width: 500px;
+    height: 250px;
+
+    /*padding: 2em 1em;*/
+    border-style: ridge groove groove ridge;
+    border-width: 2em;
+    border-color: lime red yellow blue;
+    border-radius: 1em;
+
+    clip-path: polygon(
+        0 2em,
+        2em 0,
+
+        calc(50% - 1em) 0,
+        50% 1em,
+        calc(50% - 1em - 1px) calc(2em + 1px),
+        calc(50% + 1em + 1px) calc(2em + 1px),
+        50% 1em,
+        calc(50% + 1em) 0,
+
+        calc(100% - 2em) 0,
+        100% 2em,
+
+        100% calc(100% - 2em),
+        calc(100% - 2em) 100%,
+
+        calc(50% + 1em) 100%,
+        50% calc(100% - 1em),
+        calc(50% + 1em + 1px) calc(100% - 2em - 1px),
+        calc(50% - 1em - 1px) calc(100% - 2em - 1px),
+        50% calc(100% - 1em),
+        calc(50% - 1em) 100%,
+
+        2em 100%,
+        0% calc(100% - 2em),
+
+        0% 2em
+    );
+}
+
+#nicknameForm {
+    position: absolute;
+    width: fit-content;
+    height: fit-content;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+#nicknameForm > label {
+    color: lightslategrey;
+    width: fit-content;
+    height: fit-content;
+}
+
+#nicknameForm > label > h1 {
+    color: lightslategrey;
+    width: fit-content;
+    margin: 1.5em auto 0.5em auto;
+}
+
+#nickname {
+    text-align: center;
+    height: 2em;
+    font-size: x-large;
+    font-weight: bold;
+
+    color: transparent;
+    text-shadow: 0 0 0 black;
+}
+
+#nickname:focus {
+    background-color: lightblue;
+}
+
+#nicknameDiv {
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.game-select-div {
+    position: absolute;
+    width: 48.5%;
+    height: 98%;
+
+    background-color: cornsilk;
+    box-sizing: border-box;
+}
+
+.game-select-div > div {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 1em;
+    border: thin solid black;
+    box-sizing:border-box ;
+}
+
+#overlayCreateDiv {
+    top: 1%;
+    left: 1%;
+}
+
+#overlayJoinDiv {
+    top: 1%;
+    right: 1%;
+}
+
+.game-select-button {
+    width: 100%;
+    height: 100%;
+    border: thin solid black;
+}
+
+.game-select-button:hover {
+    background-color: lightskyblue;
+    color: blue;
+    border: thick solid black;
+    border-radius: 5px;
+}
+
+#submitButton {
+    z-index: 1;
+    width: 10%;
+    height: 10%;
+    border: thick outset darkgray;
+    background-color: lightslategray;
+    font-size: 2em;
+    padding: 0;
+}
+
+#submitButton:hover {
+    background-color: darkgray;
+}
+
+#submitButton:active {
+    border: thick inset darkgray;
+}
+
+@media screen and (max-aspect-ratio: 5/4) {
+    .game-select-div {
+        float: none;
+        width: 98%;
+        height: 48.5%;
+    }
+    
+    #overlayCreateDiv {
+        top: 1%;
+        left: 1%;
+    }
+    
+    #overlayJoinDiv {
+        top: auto;
+        right: auto;
+        left: 1%;
+        bottom: 1%;
+    }
+}
+
+
+#size {
+    position: relative;
+    width: fit-content;
+    margin: 0 auto;
+    padding: 0;
+}
+
+#size > input {
+    float: left;
+    display: inline;
+    width: 2em;
+    height: 2em;
+    font-size: 2em;
+    text-align: center;
+}
+
+#playerNum {
+    font-size: 2em;
+    width: 4em;
+    height: 2em;
+    margin: 0 auto;
+    display: block;
+    text-align: center;
+}
+
+#gameIndex {
+    font-size: 2em;
+    width: 4em;
+    height: 2em;
+    margin: 0 auto;
+    display: block;
+    text-align: center;
+}
+
+#goBackButton {
+    margin: 2em auto;
+    width: 60%;
+    height: 4em;
+    font-size: 1em;
+}
+
+#scoreboardTable {
+    min-width: 50vw;
+    margin: 0 auto;
+}

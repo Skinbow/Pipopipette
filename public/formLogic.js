@@ -3,8 +3,8 @@ var Form_MODULE = (function () {
     // Form the players fill in before starting the game
     let formVariables = {
         nickname: document.getElementById("nickname"),
-        radioCreate: document.getElementById("create"),
-        radioJoin: document.getElementById("join"),
+        buttonCreate: document.getElementById("gameCreateButton"),
+        buttonJoin: document.getElementById("gameJoinButton"),
         gameopt: "create",
 
         gameCreateDiv: document.getElementById("gameCreateDiv"),
@@ -15,10 +15,9 @@ var Form_MODULE = (function () {
         gameJoinDiv: document.getElementById("gameJoinDiv"),
         gameIndex: document.getElementById("gameIndex"),
 
-        gameFormDiv: document.getElementById("gameFormDiv"),
+        nicknameFormDiv: document.getElementById("nicknameFormDiv"),
+        gameFormDiv: document.getElementById("gameSelectionDiv"),
         submitButton: document.getElementById("submitButton"),
-
-        joinFailedMessage: document.getElementById("joinFailedMessage"),
     };
 
     function extractFormInfo() {
@@ -40,66 +39,97 @@ var Form_MODULE = (function () {
         return extractedFormInfo;
     }
 
-    function loadFormLogic() {
-        const failureReason = sessionStorage.getItem("join_failure");
-        if (failureReason !== null)
-        {
-            formVariables.joinFailedMessage.innerHTML = failureReason;
-            formVariables.joinFailedMessage.classList.remove("hidden");
-            sessionStorage.removeItem("join_failure");
-        }
+    function gotoGameSelect() {
+        formVariables.nicknameFormDiv.classList.add("hidden");
+        formVariables.gameFormDiv.classList.remove("hidden");
+    }
 
+    function selectJoin(formVariables) {
+        formVariables.buttonCreate.classList.remove("hidden");
+        formVariables.gameJoinDiv.classList.remove("hidden");
+
+        formVariables.buttonJoin.classList.add("hidden");
+        formVariables.gameCreateDiv.classList.add("hidden");
+
+        formVariables.gameopt = "join";
+    }
+
+    function selectCreate(formVariables) {
+        formVariables.buttonJoin.classList.remove("hidden");
+        formVariables.gameCreateDiv.classList.remove("hidden");
+
+        formVariables.buttonCreate.classList.add("hidden");
+        formVariables.gameJoinDiv.classList.add("hidden");
+
+        formVariables.gameopt = "create";
+    }
+
+    function loadFormLogic() {
         const previousFormVariablesStringified = sessionStorage.getItem("form_variables");
         if (previousFormVariablesStringified !== null)
         {
             const previousFormVariables = JSON.parse(previousFormVariablesStringified);
             formVariables.nickname.value = previousFormVariables.nickname;
+            setTimeout(function () {
+                const failureReason = sessionStorage.getItem("join_failure");
+                if (failureReason !== null)
+                {
+                    gotoGameSelect();
+                    selectJoin(formVariables);
+                    alert(failureReason);
+                    sessionStorage.removeItem("join_failure");
+                }
+            }, 100);
         }
-
-        let self = formVariables;
+        
         // Show or hide game joining and creating fields (the two of them should not show at the same time)
-        formVariables.radioCreate.onclick = function() {
-            self.gameCreateDiv.classList.remove("hidden");
-            self.gameJoinDiv.classList.add("hidden");
-            self.gameopt = "create";
+        formVariables.buttonCreate.onclick = function() {
+            selectCreate(formVariables);
         };
-        formVariables.radioJoin.onclick = function() {
-            self.gameCreateDiv.classList.add("hidden");
-            self.gameJoinDiv.classList.remove("hidden");
-            self.gameopt = "join";
+        formVariables.buttonJoin.onclick = function() {
+            selectJoin(formVariables);
         };
 
         // When the form is submitted
         formVariables.submitButton.onclick = function(event) {
             event.preventDefault();
-            if (checkIfValidInput(self))
+            if (checkIfValidInput(formVariables))
             {
                 sessionStorage.setItem("form_variables", JSON.stringify(extractFormInfo()));
                 // Hide form
-                self.gameFormDiv.classList.add("hidden");
+                formVariables.gameFormDiv.classList.add("hidden");
                 window.location.href = "game.html";
             }
         };
     }
 
-    function reset() {
-        formVariables.joinFailedMessage.innerHTML = "";
-        formVariables.joinFailedMessage.classList.add("hidden");
+    // function reset() {
+    //     formVariables.buttonJoin.classList.remove("hidden") = true;
+    //     formVariables.radioJoin.checked = false;
 
-        formVariables.radioCreate.checked = true;
-        formVariables.radioJoin.checked = false;
+    //     formVariables.gameCreateDiv.classList.remove("hidden");
+    //     formVariables.gameJoinDiv.classList.add("hidden");
+    //     formVariables.gameopt = "create";
 
-        formVariables.gameCreateDiv.classList.remove("hidden");
-        formVariables.gameJoinDiv.classList.add("hidden");
-        formVariables.gameopt = "create";
+    //     formVariables.xSize.value = 7;
+    //     formVariables.ySize.value = 7;
+    //     formVariables.playernum.value = 2;
+    //     formVariables.gameIndex.value = null;
+    // }
 
-        formVariables.xSize.value = 7;
-        formVariables.ySize.value = 7;
-        formVariables.playernum.value = 2;
-        formVariables.gameIndex.value = null;
+    // Only to check if nickname was correctly entered
+    function checkIfValidName(formVariables) {
+        if (formVariables.nickname.value.length > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
-    // Checks if entered data is valid
+    // Checks if entered data is valid (nickname is checked again here to make sure the html wasn't modified and the server will receive a valid nickname)
     function checkIfValidInput(formVariables) {
         if (formVariables.nickname.value.length > 0 && parseInt(formVariables.xSize.value) > 1 && parseInt(formVariables.ySize.value) > 1)
         {
@@ -121,11 +151,32 @@ var Form_MODULE = (function () {
         return false;
     }
 
+    function nameEntered(e) {
+        if (e.code === "Enter")
+        {
+            e.preventDefault();
+            if (checkIfValidName(formVariables))
+            {
+                formVariables.nicknameFormDiv.classList.add("hidden");
+                formVariables.gameFormDiv.classList.remove("hidden");
+            }
+        }
+    }
+
+    MODULE.nameEntered = nameEntered;
     MODULE.loadFormLogic = loadFormLogic;
-    MODULE.reset = reset;
+    //MODULE.reset = reset;
     MODULE.checkIfValidInput = checkIfValidInput;
+
+    //Debug
+    MODULE.gotoGameSelect = gotoGameSelect;
 
     return MODULE;
 })();
 
-window.onload = Form_MODULE.loadFormLogic;
+window.onload = () => {
+    Form_MODULE.loadFormLogic();
+    //Debug
+    //Form_MODULE.gotoGameSelect();
+}; 
+document.onkeypress = Form_MODULE.nameEntered;

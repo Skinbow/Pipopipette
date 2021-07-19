@@ -18,13 +18,21 @@ Game_MODULE = (function (Game_MODULE) {
         // Function that initialises everything
         this.setupCanvas = function (xSize, ySize) {
             this.canvas = document.createElement("canvas");
-            this.canvas.width = 800;
-            this.canvas.height = 600;
+            this.canvas.width = xSize * 64 + 12;
+            this.canvas.height = ySize * 64 + 12;
+
+            this.canvas.classList.add("centered");
 
             // Number of squares horizontally and vertically
             this.squaresHeight = parseInt(xSize);
             this.squaresWidth = parseInt(ySize);
             this.context = this.canvas.getContext("2d");
+
+            // Disabling anti-aliasing
+            this.context.webkitImageSmoothingEnabled = false;
+            this.context.mozImageSmoothingEnabled = false;
+            this.context.imageSmoothingEnabled = false;
+            
 
             // Inserting canvas into HTML document
             document.body.insertBefore(this.canvas, document.body.childNodes[0]);

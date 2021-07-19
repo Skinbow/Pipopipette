@@ -7,40 +7,65 @@
         <script async src="formLogic.js"></script>
     </head>
     <body>
-        <div id="gameFormDiv">
-            <form id="gameForm">
-                <label for="nickname">Your nickname:</label><br>
-                <input type="text" id="nickname" name="nickname" placeholder="Guest" autofocus autocomplete="off"><br>
-
-                <input type="radio" id="create" name="gameopt" value="create" checked>
-                <label for="create">Create game</label>
-
-                <input type="radio" id="join" name="gameopt" value="join">
-                <label for="join">Join existing game</label>
-
-                <br>
-                <div id="gameCreateDiv">
-                    <label for="size">Choose board size:</label>
-                    <fieldset id="size">
-                        <input type="number" id="xSize" name="xSize" value="2">
-                        <input type="number" id="ySize" name="ySize" value="2">
-                    </fieldset>
-
-                    <label for="playerNum">Number of players:</label>
-                    <input type="number" id="playerNum" name="playerNum" value="2">
+        <div id="nicknameFormDiv" class="centered">
+            <div id="borderDiv" class="centered"></div>
+            <form id="nicknameForm">
+                <div id="nicknameDiv">
+                    <input type="text" id="nickname" name="nickname" placeholder="Nickname" maxlength="20" autocomplete="off" spellcheck="false" autofocus>
                 </div>
-
-                <div id="gameJoinDiv" class="hidden">
-                    <label for="gameIndex">Joining address</label>
-                    <fieldset id="joinGameIndex">
-                        <input type="number" id="gameIndex" name="gameIndex" value="0">
-                    </fieldset>
-                </div>
-
-                <input type="submit" id="submitButton" value="Submit">
-
-                <h2 id="joinFailedMessage" class="hidden" style="color: red;"></h2>
+                <label for="nickname"><h1>What shall your nickname be?</h1></label>
             </form>
+        </div>
+
+        <div id="gameSelectionDiv" class="hidden">
+            <input id="submitButton" type="submit" value="Start" class="centered">
+            <div id="overlayCreateDiv" class="game-select-div">
+                <button id="gameCreateButton" class="game-select-button">
+                    <div>
+                        <h3>
+                            Create new game
+                        </h3>
+                    </div>
+                </button>
+                <div id="gameCreateDiv" class="hidden ">
+                    <form id="gameCreateForm" class="centered">
+                        <label for="size">
+                            <h4>Choose board size</h4>
+                        </label>
+                        <fieldset id="size">
+                            <input type="number" id="xSize" name="xSize" value="2">
+                            <input type="number" id="ySize" name="ySize" value="2">
+                        </fieldset>
+
+                        <label for="playerNum">
+                            <h4>Number of players</h4>
+                        </label>
+                        <input type="number" id="playerNum" name="playerNum" value="2">
+                    </form>
+                </div>
+            </div>
+
+            
+            <div id="overlayJoinDiv" class="game-select-div">
+                <button id="gameJoinButton" class="game-select-button">
+                    <div>
+                        <h3>
+                            Join existing game
+                        </h3>
+                    </div>
+                </button>
+                <div id="gameJoinDiv" class="hidden">
+                    <form id="gameJoinForm" class="centered">
+                        <label for="gameIndex">
+                            <h4>Joining address</h4>
+                        </label>
+                        <fieldset id="joinGameIndex">
+                            <input type="number" id="gameIndex" name="gameIndex" class="no-arrows" value="0">
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+
         </div>
     </body>
 </html>

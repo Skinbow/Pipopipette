@@ -159,21 +159,39 @@
                 scoreboard = JSON.parse(scoreboard);
                 console.log(scoreboard);
                 Game_MODULE.gameArea.destroy();
-                let scoresList = document.createElement("ul");
+
+                let scoreboardDiv = document.createElement("div");
+                scoreboardDiv.classList.add("centered");
+                scoreboardDiv.style.width = "100%";
+
+                let borderDiv = document.createElement("div");
+                borderDiv.style.cssText += "border: 1em outset gray; width: fit-content; margin: 0 auto;";
+
+                let scoreboardTable = document.createElement("table");
+                scoreboardTable.id = "scoreboardTable";
+
+                let scoreHeader = document.createElement("tr");
+                scoreHeader.innerHTML = "<th><h3>Name</h3></th><th><h4>Score</h4></th>";
+                scoreboardTable.appendChild(scoreHeader);
                 for (let entry of scoreboard)
                 {
                     console.log(entry);
-                    let key = players.dict.get(entry[0]).nickname;
-                    let scoreEntry = document.createElement("li");
-                    scoreEntry.innerHTML = "<h2>" + key + "</h2><h3>" + entry[1] + "</h3>";
-                    scoresList.appendChild(scoreEntry);
+                    const key = players.dict.get(entry[0]).nickname;
+                    let scoreEntry = document.createElement("tr");
+                    scoreEntry.innerHTML = "<td><h3>" + key + "</h3></td><td><h4>" + entry[1] + "</h4></td>";
+                    scoreboardTable.appendChild(scoreEntry);
                 }
-                document.body.appendChild(scoresList);
+                borderDiv.appendChild(scoreboardTable);
+                scoreboardDiv.appendChild(borderDiv);
                 
                 let goBackButton = document.createElement("button");
                 goBackButton.innerHTML = "Return to main page";
+                goBackButton.id = "goBackButton";
+                
                 goBackButton.onclick = resetPage;
-                document.body.appendChild(goBackButton);
+                scoreboardDiv.appendChild(goBackButton);
+
+                document.body.appendChild(scoreboardDiv);
             });
         };
         

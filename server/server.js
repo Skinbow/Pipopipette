@@ -130,7 +130,7 @@ io.on("connection", (socket) => {
         socket.to(gameIndex).emit("claimed_stick", stickId);
 
         addToScore(gameIndex, getPlayersTurn(gameIndex), parseInt(squaresClaimed));
-        if (gameIsFinished(gameIndex))
+        if (true | gameIsFinished(gameIndex))
         {
             let scoreboard = getScoreboard(gameIndex);
             console.table(scoreboard);

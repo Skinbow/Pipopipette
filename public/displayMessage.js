@@ -3,8 +3,8 @@ var DisplayedMessage_MODULE = (function () {
 
     let displayedMessage = {
         messageDiv: document.createElement("div"),
-        message: document.createElement("h1"),
-        gameIndex: document.createElement("h3")
+        message: document.createElement("h3"),
+        gameIndex: document.createElement("h4")
     };
 
     let initialized = false,
@@ -15,6 +15,7 @@ var DisplayedMessage_MODULE = (function () {
         displayedMessage.messageDiv.appendChild(displayedMessage.gameIndex);
 
         displayedMessage.messageDiv.id = "displayedMessage";
+        displayedMessage.messageDiv.classList.add("centered");
 
         displayedMessage.message.style.textAlign = "center";
         displayedMessage.gameIndex.style.textAlign = "center";
