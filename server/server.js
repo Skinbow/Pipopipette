@@ -66,7 +66,7 @@ function sendGameInfo(socket, gameIndex) {
 function broadcastPlayersTurn(gameIndex, playersTurnIndex) {
     const game = getGame(gameIndex);
     const playersTurnSocketId = game.playersIdsList[playersTurnIndex];
-    
+
     io.to(gameIndex).emit("players_turn", playersTurnSocketId);
     // console.log("Broadcast to everyone that it's the turn of " + game.playerdict.get(playersTurnSocketId).nickname);
 }
@@ -100,8 +100,10 @@ io.on("connection", (socket) => {
             gameIndex,
             nickname
         } = joinInfo;
-        
-        if (!(checkIfValidJoin(socket, gameIndex))) return;
+
+        if (!(checkIfValidJoin(socket, gameIndex))) {
+            return;
+        }
 
         // Adds joining player to requested game
         addPlayer(socket, gameIndex, nickname);

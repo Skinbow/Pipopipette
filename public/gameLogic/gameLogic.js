@@ -5,7 +5,7 @@ Game_MODULE = (function (Game_MODULE) {
         updateGame;
 
     let mouseState;
-    
+
     // Begins the game
     startGame = function (XSize, YSize, stickClaimAlertFunction) {
         // Extracting images from paths
@@ -62,16 +62,18 @@ Game_MODULE = (function (Game_MODULE) {
 
         // Record cursor coordinate change
         changeMousePos: function (event) {
+            const scale = Game_MODULE.gameArea.scale;
             let rect = Game_MODULE.gameArea.canvas.getBoundingClientRect();
-            mouseState.x = event.clientX - rect.left;
-            mouseState.y = event.clientY - rect.top;
+            mouseState.x = (event.clientX - rect.left) / scale;
+            mouseState.y = (event.clientY - rect.top) / scale;
         },
 
         // Record cursor coordinate for last release
         mouseReleased: function (event) {
+            const scale = Game_MODULE.gameArea.scale;
             let rect = Game_MODULE.gameArea.canvas.getBoundingClientRect();
-            mouseState.mouseReleaseLocation.x = event.clientX - rect.left;
-            mouseState.mouseReleaseLocation.y = event.clientY - rect.top;
+            mouseState.mouseReleaseLocation.x = (event.clientX - rect.left) / scale;
+            mouseState.mouseReleaseLocation.y = (event.clientY - rect.top) / scale;
             mouseState.mouseReleaseLocation.recently = true;
         }
     };

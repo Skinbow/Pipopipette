@@ -2,6 +2,14 @@
     display: none;
 }
 
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
 html, body, #gameSelectionDiv {
     width: 100%;
     height: 100%;
@@ -26,8 +34,12 @@ h4 {
     font-weight: bold;
 }
 
-h1, h2, h3, h4 {
+h1, h2, h3, h4, h5, h6 {
     text-align: center;
+}
+
+h1, h2 {
+    margin: 0 auto;
 }
 
 fieldset {
@@ -66,67 +78,60 @@ input[type="number"]::-webkit-inner-spin-button {
     opacity: 1;
 }
 
-
-.centered {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-}
-
 #nicknameFormDiv {
-    width: calc(500px + 2em);
-    height: calc(250px + 2em);
+    width: 750px;
+    height: 375px;
 
     background-color: white;
 }
 
 #borderDiv {
-    width: 500px;
-    height: 250px;
+    --border-width: 2.5em;
+    --half-border-width: calc(var(--border-width) / 2);
+
+    width: calc(750px - var(--border-width));
+    height: calc(375px - var(--border-width));
 
     /*padding: 2em 1em;*/
     border-style: ridge groove groove ridge;
-    border-width: 2em;
+    border-width: var(--border-width);
     border-color: lime red yellow blue;
-    border-radius: 1em;
 
     clip-path: polygon(
-        0 2em,
-        2em 0,
+        0 var(--border-width),
+        var(--border-width) 0,
 
-        calc(50% - 1em) 0,
-        50% 1em,
-        calc(50% - 1em - 1px) calc(2em + 1px),
-        calc(50% + 1em + 1px) calc(2em + 1px),
-        50% 1em,
-        calc(50% + 1em) 0,
+        calc(50% - var(--half-border-width)) 0,
+        50% var(--half-border-width),
+        calc(50% - var(--half-border-width) - 1px) calc(var(--border-width) + 1px),
+        calc(50% + var(--half-border-width) + 1px) calc(var(--border-width) + 1px),
+        50% var(--half-border-width),
+        calc(50% + var(--half-border-width)) 0,
 
-        calc(100% - 2em) 0,
-        100% 2em,
+        calc(100% - var(--border-width)) 0,
+        100% var(--border-width),
 
-        100% calc(100% - 2em),
-        calc(100% - 2em) 100%,
+        100% calc(100% - var(--border-width)),
+        calc(100% - var(--border-width)) 100%,
 
-        calc(50% + 1em) 100%,
-        50% calc(100% - 1em),
-        calc(50% + 1em + 1px) calc(100% - 2em - 1px),
-        calc(50% - 1em - 1px) calc(100% - 2em - 1px),
-        50% calc(100% - 1em),
-        calc(50% - 1em) 100%,
+        calc(50% + var(--half-border-width)) 100%,
+        50% calc(100% - var(--half-border-width)),
+        calc(50% + var(--half-border-width) + 1px) calc(100% - var(--border-width) - 1px),
+        calc(50% - var(--half-border-width) - 1px) calc(100% - var(--border-width) - 1px),
+        50% calc(100% - var(--half-border-width)),
+        calc(50% - var(--half-border-width)) 100%,
 
-        2em 100%,
-        0% calc(100% - 2em),
+        var(--border-width) 100%,
+        0% calc(100% - var(--border-width)),
 
-        0% 2em
+        0% var(--border-width)
     );
 }
 
 #nicknameForm {
     position: absolute;
-    width: fit-content;
-    height: fit-content;
+    width: inherit;
+    height: inherit;
     top: 50%;
     left: 50%;
     -ms-transform: translate(-50%, -50%);
@@ -140,15 +145,18 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 #nicknameForm > label > h1 {
+    position: relative;
     color: lightslategrey;
     width: fit-content;
-    margin: 1.5em auto 0.5em auto;
+    margin: 0 auto;
+    font-size: 3em;
 }
 
 #nickname {
     text-align: center;
+    width: 10em;
     height: 2em;
-    font-size: x-large;
+    font-size: 2.25em;
     font-weight: bold;
 
     color: transparent;
@@ -160,8 +168,10 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 #nicknameDiv {
+    position: relative;
+    top: 5%;
     width: fit-content;
-    margin: 0 auto;
+    margin: 10% auto;
 }
 
 .game-select-div {
@@ -177,7 +187,7 @@ input[type="number"]::-webkit-inner-spin-button {
     position: relative;
     width: 100%;
     height: 100%;
-    padding: 1em;
+    padding: 1vw;
     border: thin solid black;
     box-sizing:border-box ;
 }
@@ -196,31 +206,103 @@ input[type="number"]::-webkit-inner-spin-button {
     width: 100%;
     height: 100%;
     border: thin solid black;
+    background-color: rgb(239, 239, 239);
+}
+
+.game-select-button h3 {
+    color: rgb(239, 239, 239);
+    -webkit-filter: invert(100%);
+    filter: invert(100%);
 }
 
 .game-select-button:hover {
     background-color: lightskyblue;
     color: blue;
-    border: thick solid black;
+    border: 0.5vw solid black;
     border-radius: 5px;
 }
 
-#submitButton {
+#centralButtonsDiv {
     z-index: 1;
-    width: 10%;
-    height: 10%;
-    border: thick outset darkgray;
-    background-color: lightslategray;
-    font-size: 2em;
-    padding: 0;
+    width: 15%;
+    height: 25%;
 }
 
-#submitButton:hover {
+.centralBorderSides {
+    position: absolute;
+    width: 7vw;
+    height: 100%;
+    box-sizing: border-box;
+    z-index: 1;
+}
+
+#centralLeftBorder {
+    left: 0;
+    border: thin solid black;
+    border-right-style: none;
+}
+
+#centralRightBorder {
+    right: 0;
+    border: thin solid black;
+    border-left-style: none;
+}
+
+#centralButtonsBorderDiv {
+    width: 15%;
+    height: 25%;
+    z-index: 1;
+    background-color: cornsilk;
+
+    /*border: thin solid black;
+    clip-path: polygon(
+        0 0,
+
+        calc(50% - 0.5vw) 0,
+        calc(50% - 0.5vw) 10%,
+        calc(50% + 0.5vw) 10%,
+        calc(50% + 0.5vw) 0,
+
+        100% 0,
+        100% 100%,
+
+        calc(50% + 0.5vw) 100%,
+        calc(50% + 0.5vw) 90%,
+        calc(50% - 0.5vw) 90%,
+        calc(50% - 0.5vw) 100%,
+
+        0 100%,
+        0 0
+    );*/
+}
+
+#submitButton, #goBackButton {
+    display: block;
+    width: 80%;
+    height: 40%;
+    border: 1vw outset darkgray;
+    background-color: lightslategray;
+    font-size: 3vw;
+    padding: 0;
+    margin: 0 auto;
+}
+
+#submitButton:hover, #submitButton:active, #goBackButton:hover, #goBackButton:active {
     background-color: darkgray;
 }
 
-#submitButton:active {
-    border: thick inset darkgray;
+#submitButton:active, #goBackButton:active {
+    border-style: inset;
+}
+
+#submitButton {
+    position: relative;
+    top: 5%;
+}
+
+#goBackButton {
+    position: relative;
+    top: 15%;
 }
 
 @media screen and (max-aspect-ratio: 5/4) {
@@ -278,14 +360,13 @@ input[type="number"]::-webkit-inner-spin-button {
     text-align: center;
 }
 
-#goBackButton {
-    margin: 2em auto;
-    width: 60%;
-    height: 4em;
-    font-size: 1em;
-}
-
 #scoreboardTable {
     min-width: 50vw;
     margin: 0 auto;
+}
+
+#divForCanvas {
+    overflow: auto;
+    width: 80%;
+    height: 80%;
 }

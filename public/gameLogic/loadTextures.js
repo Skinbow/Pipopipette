@@ -14,18 +14,20 @@ Game_MODULE = (function (Game_MODULE) {
         // Method used to extract images from paths
         init: function () {
             if (Game_MODULE.stickTexturesInitiated)
+            {
                 return;
+            }
 
             let tempImg;
             // Creating images with given source paths
             for (let type of this.types) {
                 tempImg = new Image();
                 tempImg.src = "./assets/StickTextures/" + type + "/StickHorizontal.png";
-                this["horizontal"][type] = tempImg;
+                this.horizontal[type] = tempImg;
 
                 tempImg = new Image();
                 tempImg.src = "./assets/StickTextures/" + type + "/StickVertical.png";
-                this["vertical"][type] = tempImg;
+                this.vertical[type] = tempImg;
             }
             Game_MODULE.stickTexturesInitiated = true;
         }
@@ -41,7 +43,9 @@ Game_MODULE = (function (Game_MODULE) {
         // Method used to extract images from paths
         init: function () {
             if (Game_MODULE.wallTexturesInitiated)
+            {
                 return;
+            }
 
             let key,
                 tempImg;

@@ -4,6 +4,7 @@
         <title>Pipopipette</title>
         <link rel="icon" type="image/png" href="favicon.ico">
         <link rel="stylesheet" type="text/css" href="stylesheet.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script async src="formLogic.js"></script>
     </head>
     <body>
@@ -18,7 +19,6 @@
         </div>
 
         <div id="gameSelectionDiv" class="hidden">
-            <input id="submitButton" type="submit" value="Start" class="centered">
             <div id="overlayCreateDiv" class="game-select-div">
                 <button id="gameCreateButton" class="game-select-button">
                     <div>
@@ -44,7 +44,6 @@
                     </form>
                 </div>
             </div>
-
             
             <div id="overlayJoinDiv" class="game-select-div">
                 <button id="gameJoinButton" class="game-select-button">
@@ -64,6 +63,15 @@
                         </fieldset>
                     </form>
                 </div>
+            </div>
+
+            <div id="centralButtonsBorderDiv" class="centered">
+                <div id="centralLeftBorder" class="centralBorderSides"></div>
+                <div id="centralRightBorder" class="centralBorderSides"></div>
+            </div>
+            <div id="centralButtonsDiv" class="centered">
+                <input id="submitButton" type="submit" value="Start">
+                <button id="goBackButton">Back</button>
             </div>
 
         </div>

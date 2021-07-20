@@ -5,7 +5,7 @@ var Form_MODULE = (function () {
         nickname: document.getElementById("nickname"),
         buttonCreate: document.getElementById("gameCreateButton"),
         buttonJoin: document.getElementById("gameJoinButton"),
-        gameopt: "create",
+        gameopt: "",
 
         gameCreateDiv: document.getElementById("gameCreateDiv"),
         xSize: document.getElementById("xSize"),
@@ -17,8 +17,33 @@ var Form_MODULE = (function () {
 
         nicknameFormDiv: document.getElementById("nicknameFormDiv"),
         gameFormDiv: document.getElementById("gameSelectionDiv"),
+
         submitButton: document.getElementById("submitButton"),
+        goBackButton: document.getElementById("goBackButton")
     };
+
+    function prettifyMiddle()
+    {
+        if (!$("#gameCreateButton").hasClass("hidden"))
+        {
+            $("#gameCreateButton").hover(function () {
+                $("#centralLeftBorder").css("border-width", "thick");
+            },
+            function () {
+                $("#centralLeftBorder").css("border-width", "thin");
+            });
+        }
+
+        if (!$("#gameJoinButton").hasClass("hidden"))
+        {
+            $("#gameJoinButton").hover(function () {
+                $("#centralRightBorder").css("border-width", "thick");
+            },
+            function () {
+                $("#centralRightBorder").css("border-width", "thin");
+            });
+        }
+    }
 
     function extractFormInfo() {
         let extractedFormInfo = {};
@@ -65,23 +90,24 @@ var Form_MODULE = (function () {
     }
 
     function loadFormLogic() {
-        const previousFormVariablesStringified = sessionStorage.getItem("form_variables");
-        if (previousFormVariablesStringified !== null)
+        const playerPreviousNickname = sessionStorage.getItem("nickname");
+        if (playerPreviousNickname !== null)
         {
-            const previousFormVariables = JSON.parse(previousFormVariablesStringified);
-            formVariables.nickname.value = previousFormVariables.nickname;
-            setTimeout(function () {
-                const failureReason = sessionStorage.getItem("join_failure");
-                if (failureReason !== null)
-                {
+            formVariables.nickname.value = playerPreviousNickname;
+            const failureReason = sessionStorage.getItem("join_failure");
+            if (failureReason !== null)
+            {
+                setTimeout(function () {
                     gotoGameSelect();
                     selectJoin(formVariables);
                     alert(failureReason);
                     sessionStorage.removeItem("join_failure");
-                }
-            }, 100);
+                }, 100);
+            }
         }
-        
+
+        prettifyMiddle();
+
         // Show or hide game joining and creating fields (the two of them should not show at the same time)
         formVariables.buttonCreate.onclick = function() {
             selectCreate(formVariables);
@@ -100,6 +126,12 @@ var Form_MODULE = (function () {
                 formVariables.gameFormDiv.classList.add("hidden");
                 window.location.href = "game.html";
             }
+        };
+
+        formVariables.goBackButton.onclick = function()
+        {
+            formVariables.nicknameFormDiv.classList.remove("hidden");
+            formVariables.gameFormDiv.classList.add("hidden");
         };
     }
 
@@ -152,7 +184,7 @@ var Form_MODULE = (function () {
     }
 
     function nameEntered(e) {
-        if (e.code === "Enter")
+        if (e.key === "Enter")
         {
             e.preventDefault();
             if (checkIfValidName(formVariables))
@@ -178,5 +210,5 @@ window.onload = () => {
     Form_MODULE.loadFormLogic();
     //Debug
     //Form_MODULE.gotoGameSelect();
-}; 
+};
 document.onkeypress = Form_MODULE.nameEntered;

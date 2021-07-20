@@ -33,7 +33,7 @@ function generateGameIndex()
 
 /**
  * Creates a new game with the set characteristics
- * @param {number} BoardX X size of the board in number of lines 
+ * @param {number} BoardX X size of the board in number of lines
  * @param {number} BoardY Y size of the board in number of lines
  * @param {number} playerNum Number of players expected in the game
  * @returns {String} The new game's index
@@ -58,7 +58,7 @@ function createGame(BoardX, BoardY, playerNum)
 
 /**
  * Delete the game with the set index
- * @param {number} gameIndex 
+ * @param {number} gameIndex
  */
 function deleteGame(gameIndex)
 {
@@ -68,7 +68,7 @@ function deleteGame(gameIndex)
 
 /**
  * Get the game with the set index
- * @param {number} gameIndex 
+ * @param {number} gameIndex
  * @returns {gameType}
  */
 function getGame(gameIndex)
@@ -78,7 +78,7 @@ function getGame(gameIndex)
 
 /**
  * Checks if a game with the set index exists
- * @param {String} gameIndex 
+ * @param {String} gameIndex
  * @returns {boolean}
  */
 function gameExists(gameIndex)
@@ -88,30 +88,30 @@ function gameExists(gameIndex)
 
 /**
  * Checks if the game is full
- * @param {String} gameIndex 
+ * @param {String} gameIndex
  * @returns {boolean}
  */
 function gameIsFull(gameIndex) {
     const game = getGame(gameIndex);
     console.assert(game.playerdict.size <= game.expectedPlayers, "More players than possible are connected");
-    return (game.playerdict.size == game.expectedPlayers);
+    return (game.playerdict.size === game.expectedPlayers);
 }
 
 /**
  * Checks if the game is empty
- * @param {String} gameIndex 
+ * @param {String} gameIndex
  * @returns {boolean}
  */
 function gameIsEmpty(gameIndex) {
     const game = getGame(gameIndex);
     console.assert(game.playerdict.size <= game.expectedPlayers, "More players than possible are connected");
-    return (game.playerdict.size == 0);
+    return (game.playerdict.size === 0);
 }
 
 /**
  * Adds a new player to the game with the set index
- * @param {Object} socket 
- * @param {String} gameIndex 
+ * @param {Object} socket
+ * @param {String} gameIndex
  * @param {String} playerNickname
  */
 function addPlayer(socket, gameIndex, playerNickname)
@@ -126,31 +126,35 @@ function addPlayer(socket, gameIndex, playerNickname)
 
 /**
  * Removes a player from the game with the set index
- * @param {String} gameIndex 
- * @param {String} playerId 
+ * @param {String} gameIndex
+ * @param {String} playerId
  */
 function removePlayer(gameIndex, playerId)
 {
     if (getGame(gameIndex).playerdict.has(playerId))
+    {
         getGame(gameIndex).playerdict.delete(playerId);
+    }
 }
 
 /**
  * Sets the player's turn index to the next player's index
- * @param {String} gameIndex 
+ * @param {String} gameIndex
  * @returns {number} The index of the player whose turn it is after it's incremented
  */
 function nextPlayersTurn(gameIndex)
 {
     let game = getGame(gameIndex);
     if (++game.playersTurnIndex >= game.expectedPlayers)
+    {
         game.playersTurnIndex = 0;
+    }
     return game.playersTurnIndex;
 }
 
 /**
  * Gets the index of the player whose turn it is
- * @param {String} gameIndex 
+ * @param {String} gameIndex
  * @returns {number} The index of the player whose turn it is
  */
 function getPlayersTurn(gameIndex) {
@@ -159,7 +163,7 @@ function getPlayersTurn(gameIndex) {
 
 /**
  * Adds to the score of a player
- * @param {String} gameIndex 
+ * @param {String} gameIndex
  * @param {number} playerIndex The index of the player whose score has to be increased
  * @param {number} toAdd Number of points to add
  */
@@ -170,12 +174,12 @@ function addToScore(gameIndex, playerIndex, toAdd) {
 
 /**
  * Returns sorted by values Object with socket.ids and scores
- * @param {String} gameIndex 
+ * @param {String} gameIndex
  */
 function getScoreboard(gameIndex) {
     const buildMap = (keys, values) => {
         let map = new Map();
-        for(let i = 0; i < keys.length; i++){
+        for (let i = 0; i < keys.length; i++) {
             map.set(keys[i], values[i]);
         }
         return map;
@@ -193,17 +197,17 @@ function getScoreboard(gameIndex) {
 
 /**
  * Returns whether the game is finished
- * @param {String} gameIndex 
+ * @param {String} gameIndex
  * @returns {boolean}
  */
 function gameIsFinished(gameIndex) {
     const game = getGame(gameIndex);
-    return game.playersScores.reduce((a, b) => a + b, 0) == game.XSize * game.YSize;
+    return game.playersScores.reduce((a, b) => a + b, 0) === game.XSize * game.YSize;
 }
 
 /**
  * Gets and saves the players' sockets to a list inside the game object in the games map
- * @param {String} gameIndex 
+ * @param {String} gameIndex
  */
 function initShuffledPlayersIds(gameIndex)
 {
@@ -214,13 +218,13 @@ function initShuffledPlayersIds(gameIndex)
      */
     const shuffle = function (array) {
         var currentIndex = array.length,  randomIndex;
-    
+
         // While there remain elements to shuffle...
         while (0 !== currentIndex) {
             // Pick a remaining element...
             randomIndex = Math.floor(Math.random() * currentIndex);
             currentIndex--;
-    
+
             // And swap it with the current element.
             [array[currentIndex], array[randomIndex]] = [
                 array[randomIndex], array[currentIndex]];

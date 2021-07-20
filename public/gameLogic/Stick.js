@@ -6,7 +6,7 @@ Game_MODULE = (function (Game_MODULE) {
 
             this.orientation = orientation;
 
-            this.owner = {id: "", nickname: "", color: ""};
+            this.owner = { id: "", nickname: "", color: "" };
             this.hover = false;
 
             // List of GameComponent of type "Square" that collide with this stick
@@ -117,7 +117,9 @@ Game_MODULE = (function (Game_MODULE) {
         // Checks if stick touches an active stick or a wall segment
         checkIfNeighboursAllowColoration () {
             if (this.neighbouringWallSegments.length > 0)
+            {
                 return true;
+            }
 
             for (let i = 0; i < this.neighbouringSticks.length; i += 1) {
                 if (this.neighbouringSticks[i].isActive()) {

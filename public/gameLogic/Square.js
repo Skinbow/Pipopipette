@@ -4,7 +4,7 @@ Game_MODULE = (function (Game_MODULE) {
         constructor (x, y, width, height) {
             super(x, y, width, height);
 
-            this.owner = {id: "", nickname: "", color: "white"};
+            this.owner = { id: "", nickname: "", color: "white" };
 
             // List containing all sticks that touch the square
             this.neighbouringSticks = [];

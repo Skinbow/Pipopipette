@@ -4,7 +4,10 @@ module.exports = {
         "es6": true,
         "node": true
     },
-    "extends": "eslint:recommended",
+    "extends": [
+        "eslint:recommended",
+        "jquery",
+    ],
     "parserOptions": {
         "ecmaVersion": 6,
     },
@@ -27,6 +30,30 @@ module.exports = {
         ],
         "no-unused-vars": [
             "off"
+        ],
+        "space-in-parens": [
+            "off"
+        ],
+        "brace-style": [
+            "off"
+        ],
+        "lines-around-comment": [
+            "off"
+        ],
+        "space-before-function-paren": [
+            "off"
+        ],
+        "max-len": [
+            "off"
+        ],
+        "computed-property-spacing": [
+            "off"
+        ],
+        "array-bracket-spacing": [
+            "off"
+        ],
+        "camelcase": [
+            "off"
         ]
     },
     "globals": {
@@ -36,6 +63,8 @@ module.exports = {
         "players": "writeable",
         "Game_MODULE": "writeable",
         "Form_MODULE": "writeable",
-        "DisplayedMessage_MODULE": "readable"
+        "DisplayedMessage_MODULE": "readable",
+        "jQuery": "writeable",
+        "$": "readable"
     }
 };

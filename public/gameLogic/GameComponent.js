@@ -11,6 +11,6 @@ Game_MODULE = (function (Game_MODULE) {
         }
     }
     Game_MODULE.GameComponent = GameComponent;
-    
+
     return Game_MODULE;
 })(Game_MODULE);

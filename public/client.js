@@ -1,15 +1,14 @@
 "use strict";
 
 (function () {
-    const formVariables = JSON.parse(sessionStorage.getItem("form_variables"));
-
     // Functions
-    /** 
+    let formVariables;
+    /**
      * Make socket emit game creation or game join request
      * @type {function(): void}
      */
     let startExchangeWithServer;
-    /** 
+    /**
      * Function that creates a websocket connection
      * @type {function(): void}
      */
@@ -24,6 +23,11 @@
      * @type {function(): void}
      */
     let clearWaitingMessages;
+    /**
+     * Checks if the user refreshed to cancel the request
+     * @type {function(): void}
+     */
+    let checkIfRefresh;
     /**
      * Resets the page for the user
      * @type {function(): void}
@@ -61,12 +65,16 @@
      * @type {Object}
      */
     let socket;
-    
+
     resetPage = function () {
-        socket.disconnect();
+        if (socket != null && socket.connected)
+        {
+            socket.disconnect();
+        }
+
         // clearWaitingMessages();
         // formVariables.reset();
-        
+
         // formVariables.gameFormDiv.classList.remove("hidden");
         Game_MODULE.gameArea.destroy();
         window.location.href = "index.html";
@@ -79,11 +87,25 @@
         }
     };
 
+    checkIfRefresh = function () {
+        // If the user refreshes the page, the request should be cancelled
+        formVariables = JSON.parse(sessionStorage.getItem("form_variables"));
+
+        if (formVariables === null) {
+            resetPage();
+        }
+        else
+        {
+            sessionStorage.removeItem("form_variables");
+            sessionStorage.setItem("nickname", formVariables.nickname);
+        }
+    };
+
     // Waits for the number of players to be equal to the one set by game owner
     waitForPlayers = function () {
         /**
          * When another player joins the same game
-         * 
+         *
          * @param {Object} playerInfo Info about the new player
          * @param {String} playerInfo.id Id of the new player
          * @param {String} playerInfo.nickname Nickname of the new player
@@ -97,7 +119,7 @@
 
         /**
          * When another player disconnects from the game
-         * 
+         *
          * @param {String} id Id of the disconnected player
          */
         const alertedPlayerDisconnected = (id) => {
@@ -107,7 +129,7 @@
 
         /**
          * When it's a different player's turn
-         * 
+         *
          * @param {String} playersTurnId Id of the player whose turn it is
          */
         const alertedPlayersTurn = (playersTurnId) => {
@@ -116,7 +138,6 @@
 
         /**
          * When a stick is claimed by a player
-         * 
          * @param {number} stickId Id of the stick that was claimed
          */
         const alertedClaimedStick = (stickId) => {
@@ -131,7 +152,7 @@
 
         /**
          * When the game can start, aka enough players have joined
-         * 
+         *
          * @type {function}
          */
         const alertedStartGame = () => {
@@ -144,13 +165,13 @@
 
             /**
              * Alert the server that this user has claimed a stick
-             * 
+             *
              * @param {String} myId Id of the player who claimed the stick, that is this player
              * @param {number} stickId Id of the stick that was claimed
              */
             const stickClaimAlertFunction = (stickId, squaresClaimed) => { socket.emit("claimed_stick", stickId, squaresClaimed); };
             Game_MODULE.startGame(socket.XSize, socket.YSize, stickClaimAlertFunction);
-            
+
             socket.on("player_disconnected", alertedPlayerDisconnected);
             socket.on("players_turn", alertedPlayersTurn);
             socket.on("claimed_stick", alertedClaimedStick);
@@ -183,18 +204,19 @@
                 }
                 borderDiv.appendChild(scoreboardTable);
                 scoreboardDiv.appendChild(borderDiv);
-                
+
                 let goBackButton = document.createElement("button");
+                goBackButton.style.marginTop = "1vw";
                 goBackButton.innerHTML = "Return to main page";
                 goBackButton.id = "goBackButton";
-                
+
                 goBackButton.onclick = resetPage;
                 scoreboardDiv.appendChild(goBackButton);
 
                 document.body.appendChild(scoreboardDiv);
             });
         };
-        
+
         socket.on("new_player", alertedNewPlayer);
         socket.on("start_game", alertedStartGame);
     };
@@ -216,7 +238,9 @@
         remove: function (id)
         {
             if (players.dict.has(id))
+            {
                 players.dict.delete(id);
+            }
         },
         /**
          * Returns the next color in the available colors list
@@ -232,7 +256,9 @@
             let color = players.availableColors[players.colorCount];
             players.colorCount++;
             if (players.colorCount === playersNum || players.colorCount === players.availableColors.length)
+            {
                 players.colorCount = 0;
+            }
             return color;
         }
     };
@@ -297,7 +323,7 @@
                 const {
                     XSize,
                     YSize,
-                    playerdict,
+                    playerdict//,
                     // expectedPlayers,
                     // playersTurnIndex,
                     // playersIdsList
@@ -314,9 +340,11 @@
             });
         }
     };
-    window.onload = createSocket;
-    window.onbeforeunload = (event) => {
-        event.preventDefault();
-        resetPage();
-    };
+    
+
+    window.onload = function ()
+    {
+        checkIfRefresh();
+        createSocket();
+    }
 })();

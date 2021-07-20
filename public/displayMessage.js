@@ -46,13 +46,16 @@ var DisplayedMessage_MODULE = (function () {
         displayedMessage.message.innerHTML = message;
         displayedMessage.gameIndex.innerHTML = gameIndexMessage;
         if (typeof gameIndexMessage !== "string")
+        {
             displayedMessage.gameIndex.classList.add("hidden");
+        }
         else
+        {
             displayedMessage.gameIndex.classList.remove("hidden");
-
+        }
         show();
     }
-    
+
     MODULE.displayWaitingMessage = displayWaitingMessage;
     MODULE.show = show;
     MODULE.hide = hide;

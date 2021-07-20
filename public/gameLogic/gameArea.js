@@ -8,34 +8,49 @@ Game_MODULE = (function (Game_MODULE) {
             findStickNeighbours,
             findSquareNeigbours;
 
-        this.sticks = [],
-        this.wallSegments = [],
-        this.squares = [],
-        this.playersTurn = {},
-        this.myTurn = false,
+        this.sticks = [];
+        this.wallSegments = [];
+        this.squares = [];
+        this.playersTurn = {};
+        this.myTurn = false;
         this.exists = false;
+
+        this.stickLength = 64;
+        this.stickWidth = 9;
+        this.wallSegmentLength = 74;
+        this.wallSegmentWidth = 9;
 
         // Function that initialises everything
         this.setupCanvas = function (xSize, ySize) {
             this.canvas = document.createElement("canvas");
-            this.canvas.width = xSize * 64 + 12;
-            this.canvas.height = ySize * 64 + 12;
 
-            this.canvas.classList.add("centered");
+            this.scale = 3;
+            do {
+                this.canvas.width = this.scale * (xSize * (this.stickLength + 1) + 10);
+                this.canvas.height = this.scale * (ySize * (this.stickLength + 1) + 10);
+            } while ((this.scale-- !== 1) && (this.canvas.width > 0.8 * $(window).width() || this.canvas.height > 0.8 * $(window).height()));
+            this.scale++;
+
+            this.canvas.style.cssText += "margin: 0 auto; display: block;";
+            if (this.canvas.height < 0.8 * $(window).height())
+            {
+                this.canvas.style.cssText += "position: relative; top: " + ((0.8 * $(window).height() - this.canvas.height) / 2).toString() + "px;";
+            }
 
             // Number of squares horizontally and vertically
-            this.squaresHeight = parseInt(xSize);
-            this.squaresWidth = parseInt(ySize);
+            this.squaresWidth = parseInt(xSize);
+            this.squaresHeight = parseInt(ySize);
             this.context = this.canvas.getContext("2d");
+            this.context.scale(this.scale, this.scale);
 
             // Disabling anti-aliasing
             this.context.webkitImageSmoothingEnabled = false;
             this.context.mozImageSmoothingEnabled = false;
             this.context.imageSmoothingEnabled = false;
-            
+
 
             // Inserting canvas into HTML document
-            document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+            document.getElementById("divForCanvas").appendChild(this.canvas);
 
             fillSticks(this);
             fillWallSegments(this);
@@ -57,7 +72,7 @@ Game_MODULE = (function (Game_MODULE) {
             if (this.exists)
             {
                 clearInterval(this.updateInterval);
-                document.body.removeChild(this.canvas);
+                document.getElementById("divForCanvas").removeChild(this.canvas);
                 this.canvas.remove();
                 this.exists = false;
             }
@@ -65,7 +80,7 @@ Game_MODULE = (function (Game_MODULE) {
 
         this.setPlayersTurn = function (myId, playerId, playerNickname, playerColor)
         {
-            this.playersTurn = {id: playerId, nickname: playerNickname, color: playerColor};
+            this.playersTurn = { id: playerId, nickname: playerNickname, color: playerColor };
             this.myTurn = (myId === playerId);
         };
 
@@ -73,19 +88,15 @@ Game_MODULE = (function (Game_MODULE) {
         fillSticks = function (gameArea) {
             // Filling GameComponent list with horizontal sticks
             for (let i = 0; i < gameArea.squaresWidth; i += 1) {
-                for (let j = 0; j < gameArea.squaresHeight + 1; j += 1) {
-                    if (j !== 0 && j !== gameArea.squaresHeight) {
-                        gameArea.sticks.push(new Game_MODULE.Stick(65 * i + 5, 65 * j, 64, 9, "horizontal", gameArea.sticks.length));
-                    }
+                for (let j = 1; j < gameArea.squaresHeight; j += 1) {
+                    gameArea.sticks.push(new Game_MODULE.Stick((gameArea.stickLength + 1) * i + 5, (gameArea.stickLength + 1) * j, gameArea.stickLength, gameArea.stickWidth, "horizontal", gameArea.sticks.length));
                 }
             }
 
             // Filling GameComponent list with vertical sticks
-            for (let i = 0; i < gameArea.squaresWidth + 1; i += 1) {
+            for (let i = 1; i < gameArea.squaresWidth; i += 1) {
                 for (let j = 0; j < gameArea.squaresHeight; j += 1) {
-                    if (i !== 0 && i !== gameArea.squaresWidth) {
-                        gameArea.sticks.push(new Game_MODULE.Stick(65 * i, 65 * j + 5, 9, 64, "vertical", gameArea.sticks.length));
-                    }
+                    gameArea.sticks.push(new Game_MODULE.Stick((gameArea.stickLength + 1) * i, (gameArea.stickLength + 1) * j + 5, gameArea.stickWidth, gameArea.stickLength, "vertical", gameArea.sticks.length));
                 }
             }
         };
@@ -93,25 +104,16 @@ Game_MODULE = (function (Game_MODULE) {
         // Fills GameComponent lists with wall segments
         fillWallSegments = function (gameArea) {
             // Filling GameComponent list with horizontal wall segments
-            for (let i = 0; i < gameArea.squaresWidth; i += 1) {
-                for (let j = 0; j < gameArea.squaresHeight + 1; j += 1) {
-                    if (j === 0) {
-                        gameArea.wallSegments.push(new Game_MODULE.WallSegment(65 * i, 65 * j, 74, 9, "top"));
-                    } else if (j === gameArea.squaresHeight) {
-                        gameArea.wallSegments.push(new Game_MODULE.WallSegment(65 * i, 65 * j, 74, 9, "bottom"));
-                    }
-                }
+            for (let i = 0; i < gameArea.squaresWidth; i += 1)
+            {
+                gameArea.wallSegments.push(new Game_MODULE.WallSegment((gameArea.stickLength + 1) * i, 0, gameArea.wallSegmentLength, gameArea.wallSegmentWidth, "top"));
+                gameArea.wallSegments.push(new Game_MODULE.WallSegment((gameArea.stickLength + 1) * i, (gameArea.stickLength + 1) * gameArea.squaresHeight, gameArea.wallSegmentLength, gameArea.wallSegmentWidth, "bottom"));
             }
 
             // Filling GameComponent list with vertical wall segments
-            for (let i = 0; i < gameArea.squaresWidth + 1; i += 1) {
-                for (let j = 0; j < gameArea.squaresHeight; j += 1) {
-                    if (i === 0) {
-                        gameArea.wallSegments.push(new Game_MODULE.WallSegment(65 * i, 65 * j, 9, 74, "left"));
-                    } else if (i === gameArea.squaresWidth) {
-                        gameArea.wallSegments.push(new Game_MODULE.WallSegment(65 * i, 65 * j, 9, 74, "right"));
-                    }
-                }
+            for (let j = 0; j < gameArea.squaresHeight; j += 1) {
+                gameArea.wallSegments.push(new Game_MODULE.WallSegment(0, (gameArea.stickLength + 1) * j, gameArea.wallSegmentWidth, gameArea.wallSegmentLength, "left"));
+                gameArea.wallSegments.push(new Game_MODULE.WallSegment((gameArea.stickLength + 1) * gameArea.squaresWidth, (gameArea.stickLength + 1) * j, gameArea.wallSegmentWidth, gameArea.wallSegmentLength, "right"));
             }
         };
 
@@ -119,7 +121,7 @@ Game_MODULE = (function (Game_MODULE) {
         fillSquares = function (gameArea) {
             for (let i = 0; i < gameArea.squaresWidth; i += 1) {
                 for (let j = 0; j < gameArea.squaresHeight; j += 1) {
-                    gameArea.squares.push(new Game_MODULE.Square(65 * i + 10, 65 * j + 10, 54, 54));
+                    gameArea.squares.push(new Game_MODULE.Square((gameArea.stickLength + 1) * i + 10, (gameArea.stickLength + 1) * j + 10, 54, 54));
                 }
             }
         };
@@ -138,7 +140,7 @@ Game_MODULE = (function (Game_MODULE) {
             }
         };
     };
-    
+
     Game_MODULE.gameArea = new GameArea;
 
     return Game_MODULE;
