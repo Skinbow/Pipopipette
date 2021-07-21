@@ -192,6 +192,6 @@ process.on("SIGINT", terminate);
 // Debug, signal sent by nodemon when restarting
 process.on("SIGUSR2", terminate);
 
-server.listen(5000, () => {
-    console.log("Listenting on *:5000");
+server.listen(process.env.PORT || 5000, () => {
+    console.log("Listenting on *:" + process.env.PORT.toString() || "5000");
 });
