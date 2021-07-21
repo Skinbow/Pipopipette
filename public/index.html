@@ -4,17 +4,20 @@
         <title>Pipopipette</title>
         <link rel="icon" type="image/png" href="favicon.ico">
         <link rel="stylesheet" type="text/css" href="stylesheet.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Audiowide|Sofia|Trirong">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script async src="formLogic.js"></script>
     </head>
     <body>
         <div id="nicknameFormDiv" class="centered">
+            <h1 id="mainTitle">Pipopipette</h1>
             <div id="borderDiv" class="centered"></div>
             <form id="nicknameForm">
                 <div id="nicknameDiv">
+                    <i id="hintEnter" class="hint">Enter a name and press enter</i>
                     <input type="text" id="nickname" name="nickname" placeholder="Nickname" maxlength="20" autocomplete="off" spellcheck="false" autofocus>
                 </div>
-                <label for="nickname"><h1>What shall your nickname be?</h1></label>
+                <label for="nickname" class="centered"><h2>What shall your nickname be?</h2></label>
             </form>
         </div>
 
@@ -29,18 +32,22 @@
                 </button>
                 <div id="gameCreateDiv" class="hidden ">
                     <form id="gameCreateForm" class="centered">
-                        <label for="size">
-                            <h4>Choose board size</h4>
-                        </label>
-                        <fieldset id="size">
-                            <input type="number" id="xSize" name="xSize" value="2">
-                            <input type="number" id="ySize" name="ySize" value="2">
-                        </fieldset>
+                        <div id="sizeFieldDiv">
+                            <label for="size">
+                                <h4>Choose board size</h4>
+                            </label>
+                            <fieldset id="size">
+                                <input type="number" id="xSize" name="xSize" value="7">
+                                <input type="number" id="ySize" name="ySize" value="7">
+                            </fieldset>
+                        </div>
 
-                        <label for="playerNum">
-                            <h4>Number of players</h4>
-                        </label>
-                        <input type="number" id="playerNum" name="playerNum" value="2">
+                        <div id="playerNumFieldDiv">
+                            <label for="playerNum">
+                                <h4>Number of players</h4>
+                            </label>
+                            <input type="number" id="playerNum" name="playerNum" value="2">
+                        </div>
                     </form>
                 </div>
             </div>
@@ -59,7 +66,7 @@
                             <h4>Joining address</h4>
                         </label>
                         <fieldset id="joinGameIndex">
-                            <input type="number" id="gameIndex" name="gameIndex" class="no-arrows" value="0">
+                            <input type="number" id="gameIndex" name="gameIndex" class="no-arrows">
                         </fieldset>
                     </form>
                 </div>

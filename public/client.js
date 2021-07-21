@@ -1,8 +1,17 @@
 "use strict";
 
 (function () {
-    // Functions
     let formVariables;
+    let scoreboard;
+
+    function isMobileDevice() {
+        var check = false;
+        // eslint-disable-next-line curly, space-before-blocks, keyword-spacing, space-infix-ops, no-useless-escape, comma-spacing
+        (function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4))) check = true;})(navigator.userAgent||navigator.vendor||window.opera);
+        return check;
+    }
+    const mobile = isMobileDevice();
+    // Functions
     /**
      * Make socket emit game creation or game join request
      * @type {function(): void}
@@ -140,14 +149,18 @@
          * When a stick is claimed by a player
          * @param {number} stickId Id of the stick that was claimed
          */
-        const alertedClaimedStick = (stickId) => {
+        const alertedClaimedStick = (stickId, scoreboardIn) => {
             let gameArea = Game_MODULE.gameArea;
             let stick = gameArea.sticks[stickId];
-            stick.claimStick(Game_MODULE.gameArea.playersTurn);
-            for (let i = 0; i < stick.neighbouringSquares.length; i += 1) {
-                // Trying to claim surrounding squares which get claimed if all the sticks surrounding them are active
-                stick.neighbouringSquares[i].claimSquare(gameArea.playersTurn);
+            if (stick.claimStick(Game_MODULE.gameArea.playersTurn))
+            {
+                for (let i = 0; i < stick.neighbouringSquares.length; i += 1) {
+                    // Trying to claim surrounding squares which get claimed if all the sticks surrounding them are active
+                    stick.neighbouringSquares[i].claimSquare(gameArea.playersTurn);
+                }
             }
+            scoreboard = JSON.parse(scoreboardIn);
+            Scoreboard_MODULE.updateIngameScoreboard(scoreboard, players);
         };
 
         /**
@@ -155,7 +168,7 @@
          *
          * @type {function}
          */
-        const alertedStartGame = () => {
+        const alertedStartGame = (scoreboardIn) => {
             // TODO: Forbid new players from joining when game starts
             clearWaitingMessages();
 
@@ -172,49 +185,55 @@
             const stickClaimAlertFunction = (stickId, squaresClaimed) => { socket.emit("claimed_stick", stickId, squaresClaimed); };
             Game_MODULE.startGame(socket.XSize, socket.YSize, stickClaimAlertFunction);
 
+            scoreboard = JSON.parse(scoreboardIn);
+            Scoreboard_MODULE.initIngameScoreboard(scoreboard, players);
+            console.table(scoreboard);
+            if (!mobile)
+            {
+                document.getElementById("hintTab").classList.remove("hidden");
+            }
+
             socket.on("player_disconnected", alertedPlayerDisconnected);
             socket.on("players_turn", alertedPlayersTurn);
             socket.on("claimed_stick", alertedClaimedStick);
-            socket.on("game_finished", (scoreboard) =>
+            socket.on("game_finished", () =>
             {
-                scoreboard = JSON.parse(scoreboard);
-                console.log(scoreboard);
+                Scoreboard_MODULE.hideIngameScoreboard();
+                document.getElementById("hintTab").classList.add("hidden");
+
                 Game_MODULE.gameArea.destroy();
 
-                let scoreboardDiv = document.createElement("div");
-                scoreboardDiv.classList.add("centered");
-                scoreboardDiv.style.width = "100%";
+                Scoreboard_MODULE.displayEndgameScoreboard(scoreboard, players, resetPage);
 
-                let borderDiv = document.createElement("div");
-                borderDiv.style.cssText += "border: 1em outset gray; width: fit-content; margin: 0 auto;";
-
-                let scoreboardTable = document.createElement("table");
-                scoreboardTable.id = "scoreboardTable";
-
-                let scoreHeader = document.createElement("tr");
-                scoreHeader.innerHTML = "<th><h3>Name</h3></th><th><h4>Score</h4></th>";
-                scoreboardTable.appendChild(scoreHeader);
-                for (let entry of scoreboard)
+                document.onkeydown = null;
+                document.onkeyup = function (e)
                 {
-                    console.log(entry);
-                    const key = players.dict.get(entry[0]).nickname;
-                    let scoreEntry = document.createElement("tr");
-                    scoreEntry.innerHTML = "<td><h3>" + key + "</h3></td><td><h4>" + entry[1] + "</h4></td>";
-                    scoreboardTable.appendChild(scoreEntry);
-                }
-                borderDiv.appendChild(scoreboardTable);
-                scoreboardDiv.appendChild(borderDiv);
-
-                let goBackButton = document.createElement("button");
-                goBackButton.style.marginTop = "1vw";
-                goBackButton.innerHTML = "Return to main page";
-                goBackButton.id = "goBackButton";
-
-                goBackButton.onclick = resetPage;
-                scoreboardDiv.appendChild(goBackButton);
-
-                document.body.appendChild(scoreboardDiv);
+                    if (e.key === "Enter")
+                    {
+                        e.preventDefault();
+                        resetPage();
+                    }
+                };
             });
+
+            document.onkeydown = function (e)
+            {
+                if (e.key === "Tab")
+                {
+                    e.preventDefault();
+                    Scoreboard_MODULE.showIngameScoreboard();
+                    document.getElementById("hintTab").classList.add("hidden");
+                }
+            };
+
+            document.onkeyup = function (e)
+            {
+                if (e.key === "Tab")
+                {
+                    e.preventDefault();
+                    Scoreboard_MODULE.hideIngameScoreboard();
+                }
+            };
         };
 
         socket.on("new_player", alertedNewPlayer);
@@ -340,11 +359,10 @@
             });
         }
     };
-    
 
     window.onload = function ()
     {
         checkIfRefresh();
         createSocket();
-    }
+    };
 })();

@@ -3,6 +3,7 @@ const express = require("express");
 const http = require("http");
 const path = require("path");
 const socket_io = require("socket.io");
+
 const {
     createGame,
     deleteGame,
@@ -18,7 +19,7 @@ const {
     getScoreboard,
     gameIsFinished,
     initShuffledPlayersIds
-} = require("./gameRooms");
+} = require("./game-rooms");
 
 var app = express();
 var server = http.createServer(app);
@@ -119,24 +120,28 @@ io.on("connection", (socket) => {
 
         if (gameIsFull(gameIndex))
         {
-            io.to(gameIndex).emit("start_game");
-
             initShuffledPlayersIds(gameIndex);
+
+            const scoreboard = JSON.stringify(getScoreboard(gameIndex));
+            io.to(gameIndex).emit("start_game", scoreboard);
+
             broadcastPlayersTurn(gameIndex, getPlayersTurn(gameIndex));
         }
     });
 
     socket.on("claimed_stick", (stickId, squaresClaimed) => {
         const gameIndex = socket.gameIndex;
-        // Broadcast claimed stick
-        socket.to(gameIndex).emit("claimed_stick", stickId);
-
         addToScore(gameIndex, getPlayersTurn(gameIndex), parseInt(squaresClaimed));
-        if (true | gameIsFinished(gameIndex))
+
+        const scoreboard = getScoreboard(gameIndex);
+
+        // Broadcast claimed stick and new scoreboard
+        io.to(gameIndex).emit("claimed_stick", stickId, JSON.stringify(scoreboard));
+
+        if (gameIsFinished(gameIndex))
         {
-            let scoreboard = getScoreboard(gameIndex);
             console.table(scoreboard);
-            io.to(gameIndex).emit("game_finished", JSON.stringify(scoreboard));
+            io.to(gameIndex).emit("game_finished");
             deleteGame(gameIndex);
         }
         else

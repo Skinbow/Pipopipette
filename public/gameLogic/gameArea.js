@@ -28,13 +28,13 @@ Game_MODULE = (function (Game_MODULE) {
             do {
                 this.canvas.width = this.scale * (xSize * (this.stickLength + 1) + 10);
                 this.canvas.height = this.scale * (ySize * (this.stickLength + 1) + 10);
-            } while ((this.scale-- !== 1) && (this.canvas.width > 0.8 * $(window).width() || this.canvas.height > 0.8 * $(window).height()));
+            } while ((this.scale-- !== 1) && (this.canvas.width > 0.8 * $(window).width() || this.canvas.height > 0.9 * $(window).height()));
             this.scale++;
 
             this.canvas.style.cssText += "margin: 0 auto; display: block;";
-            if (this.canvas.height < 0.8 * $(window).height())
+            if (this.canvas.height < 0.9 * $(window).height())
             {
-                this.canvas.style.cssText += "position: relative; top: " + ((0.8 * $(window).height() - this.canvas.height) / 2).toString() + "px;";
+                this.canvas.style.cssText += "position: relative; top: " + ((0.9 * $(window).height() - this.canvas.height) / 2).toString() + "px;";
             }
 
             // Number of squares horizontally and vertically

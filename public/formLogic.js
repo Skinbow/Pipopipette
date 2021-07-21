@@ -27,7 +27,7 @@ var Form_MODULE = (function () {
         if (!$("#gameCreateButton").hasClass("hidden"))
         {
             $("#gameCreateButton").hover(function () {
-                $("#centralLeftBorder").css("border-width", "thick");
+                $("#centralLeftBorder").css("border-width", "0.5vw");
             },
             function () {
                 $("#centralLeftBorder").css("border-width", "thin");
@@ -37,7 +37,7 @@ var Form_MODULE = (function () {
         if (!$("#gameJoinButton").hasClass("hidden"))
         {
             $("#gameJoinButton").hover(function () {
-                $("#centralRightBorder").css("border-width", "thick");
+                $("#centralRightBorder").css("border-width", "0.5vw");
             },
             function () {
                 $("#centralRightBorder").css("border-width", "thin");
@@ -89,6 +89,19 @@ var Form_MODULE = (function () {
         formVariables.gameopt = "create";
     }
 
+    function keyPress(e) {
+        if (e.key === "Enter")
+        {
+            e.preventDefault();
+            if (checkIfValidName(formVariables))
+            {
+                formVariables.nicknameFormDiv.classList.add("hidden");
+                formVariables.gameFormDiv.classList.remove("hidden");
+                document.onkeydown = null;
+            }
+        }
+    }
+
     function loadFormLogic() {
         const playerPreviousNickname = sessionStorage.getItem("nickname");
         if (playerPreviousNickname !== null)
@@ -105,6 +118,7 @@ var Form_MODULE = (function () {
                 }, 100);
             }
         }
+        document.onkeydown = keyPress;
 
         prettifyMiddle();
 
@@ -119,12 +133,21 @@ var Form_MODULE = (function () {
         // When the form is submitted
         formVariables.submitButton.onclick = function(event) {
             event.preventDefault();
-            if (checkIfValidInput(formVariables))
+            if (checkIfValidName(formVariables))
             {
-                sessionStorage.setItem("form_variables", JSON.stringify(extractFormInfo()));
-                // Hide form
+                if (checkIfValidInput(formVariables))
+                {
+                    sessionStorage.setItem("form_variables", JSON.stringify(extractFormInfo()));
+                    // Hide form
+                    formVariables.gameFormDiv.classList.add("hidden");
+                    window.location.href = "game.html";
+                }
+            }
+            else
+            {
+                formVariables.nicknameFormDiv.classList.remove("hidden");
                 formVariables.gameFormDiv.classList.add("hidden");
-                window.location.href = "game.html";
+                document.onkeydown = keyPress;
             }
         };
 
@@ -132,6 +155,7 @@ var Form_MODULE = (function () {
         {
             formVariables.nicknameFormDiv.classList.remove("hidden");
             formVariables.gameFormDiv.classList.add("hidden");
+            document.onkeydown = keyPress;
         };
     }
 
@@ -163,7 +187,7 @@ var Form_MODULE = (function () {
 
     // Checks if entered data is valid (nickname is checked again here to make sure the html wasn't modified and the server will receive a valid nickname)
     function checkIfValidInput(formVariables) {
-        if (formVariables.nickname.value.length > 0 && parseInt(formVariables.xSize.value) > 1 && parseInt(formVariables.ySize.value) > 1)
+        if (parseInt(formVariables.xSize.value) > 1 && parseInt(formVariables.ySize.value) > 1)
         {
             if (formVariables.gameopt === "create")
             {
@@ -183,19 +207,6 @@ var Form_MODULE = (function () {
         return false;
     }
 
-    function nameEntered(e) {
-        if (e.key === "Enter")
-        {
-            e.preventDefault();
-            if (checkIfValidName(formVariables))
-            {
-                formVariables.nicknameFormDiv.classList.add("hidden");
-                formVariables.gameFormDiv.classList.remove("hidden");
-            }
-        }
-    }
-
-    MODULE.nameEntered = nameEntered;
     MODULE.loadFormLogic = loadFormLogic;
     //MODULE.reset = reset;
     MODULE.checkIfValidInput = checkIfValidInput;
@@ -211,4 +222,3 @@ window.onload = () => {
     //Debug
     //Form_MODULE.gotoGameSelect();
 };
-document.onkeypress = Form_MODULE.nameEntered;

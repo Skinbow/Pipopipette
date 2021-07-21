@@ -28,7 +28,7 @@ function generateGameIndex()
     {
         tryIndex = (Math.floor(Math.random() * 10)).toString();
     } while (games.has(tryIndex));
-    return "0";//tryIndex;
+    return tryIndex;
 }
 
 /**

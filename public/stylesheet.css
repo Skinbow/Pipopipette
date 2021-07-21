@@ -1,5 +1,11 @@
+* {
+    -webkit-text-size-adjust: 0 !important;
+    -moz-text-size-adjust: 0 !important;
+    -ms-text-size-adjust: 0 !important;
+}
+
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .centered {
@@ -8,6 +14,12 @@
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+}
+
+.hint {
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
 }
 
 html, body, #gameSelectionDiv {
@@ -40,6 +52,21 @@ h1, h2, h3, h4, h5, h6 {
 
 h1, h2 {
     margin: 0 auto;
+}
+
+h1 {
+    font-size: 7em;
+    position: relative;
+    bottom: 2.25em;
+    font-weight: 900;
+    font-family: "Sofia", sans-serif;
+    color: cornsilk;
+    -webkit-filter: invert(100%);
+    filter: invert(100%);
+}
+
+h2 {
+    font-size: 3em;
 }
 
 fieldset {
@@ -79,8 +106,9 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 #nicknameFormDiv {
-    width: 750px;
-    height: 375px;
+    width: 40%;
+    min-width: 700px;
+    height: 400px;
 
     background-color: white;
 }
@@ -89,8 +117,8 @@ input[type="number"]::-webkit-inner-spin-button {
     --border-width: 2.5em;
     --half-border-width: calc(var(--border-width) / 2);
 
-    width: calc(750px - var(--border-width));
-    height: calc(375px - var(--border-width));
+    width: calc(100% - var(--border-width));
+    height: calc(100% - var(--border-width));
 
     /*padding: 2em 1em;*/
     border-style: ridge groove groove ridge;
@@ -130,8 +158,8 @@ input[type="number"]::-webkit-inner-spin-button {
 
 #nicknameForm {
     position: absolute;
-    width: inherit;
-    height: inherit;
+    width: 100%;
+    height: 100%;
     top: 50%;
     left: 50%;
     -ms-transform: translate(-50%, -50%);
@@ -142,17 +170,20 @@ input[type="number"]::-webkit-inner-spin-button {
     color: lightslategrey;
     width: fit-content;
     height: fit-content;
+    bottom: 15%;
+    top: unset;
 }
 
-#nicknameForm > label > h1 {
+#nicknameForm > label > h2 {
     position: relative;
     color: lightslategrey;
     width: fit-content;
     margin: 0 auto;
-    font-size: 3em;
+    font-size: 250%;
 }
 
 #nickname {
+    display: block;
     text-align: center;
     width: 10em;
     height: 2em;
@@ -165,6 +196,12 @@ input[type="number"]::-webkit-inner-spin-button {
 
 #nickname:focus {
     background-color: lightblue;
+}
+
+#hintEnter {
+    position: relative;
+    font-size: 1.5em;
+    bottom: 1em;
 }
 
 #nicknameDiv {
@@ -225,12 +262,13 @@ input[type="number"]::-webkit-inner-spin-button {
 #centralButtonsDiv {
     z-index: 1;
     width: 15%;
+    min-width: 150px;
     height: 25%;
 }
 
 .centralBorderSides {
     position: absolute;
-    width: 7vw;
+    width: 46.5%;;
     height: 100%;
     box-sizing: border-box;
     z-index: 1;
@@ -250,6 +288,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
 #centralButtonsBorderDiv {
     width: 15%;
+    min-width: 150px;
     height: 25%;
     z-index: 1;
     background-color: cornsilk;
@@ -282,7 +321,7 @@ input[type="number"]::-webkit-inner-spin-button {
     height: 40%;
     border: 1vw outset darkgray;
     background-color: lightslategray;
-    font-size: 3vw;
+    font-size: 200%;
     padding: 0;
     margin: 0 auto;
 }
@@ -305,6 +344,12 @@ input[type="number"]::-webkit-inner-spin-button {
     top: 15%;
 }
 
+@media screen and (max-height: 850px) {
+    #mainTitle {
+        display: none;
+    }
+}
+
 @media screen and (max-aspect-ratio: 5/4) {
     .game-select-div {
         float: none;
@@ -323,6 +368,83 @@ input[type="number"]::-webkit-inner-spin-button {
         left: 1%;
         bottom: 1%;
     }
+
+    #centralButtonsDiv {
+        z-index: 1;
+        width: 25em;
+        min-width: 150px;
+        height: 15%;
+    }
+
+    .centralBorderSides {
+        position: absolute;
+        width: 100%;
+        height: 46.75%;
+        box-sizing: border-box;
+        z-index: 1;
+    }
+    
+    #centralLeftBorder {
+        top: 0;
+        border: thin solid black;
+        border-bottom-style: none;
+    }
+    
+    #centralRightBorder {
+        bottom: 0;
+        border: thin solid black;
+        border-top-style: none;
+    }
+    
+    #centralButtonsBorderDiv {
+        width: 25em;
+        min-width: 150px;
+        height: 15%;
+        z-index: 1;
+        background-color: cornsilk;
+    }
+    
+    #submitButton, #goBackButton {
+        display: block;
+        position: absolute;
+        width: 40%;
+        height: 80%;
+        border: 1vw outset darkgray;
+        background-color: lightslategray;
+        font-size: 200%;
+        padding: 0;
+        margin: 0 auto;
+    }
+
+    #submitButton {
+        left: 6%;
+        top: 50%;
+        -ms-transform: translate(0, -50%);
+        transform: translate(0, -50%);
+    }
+
+    #goBackButton {
+        right: 6%;
+        top: 50%;
+        -ms-transform: translate(0, -50%);
+        transform: translate(0, -50%);
+    }
+
+    #gameCreateForm {
+        width: 80vw;
+        height: 60%;
+    }
+
+    #playerNumFieldDiv {
+        position: absolute;
+        left: 0%;
+    }
+
+    #sizeFieldDiv {
+        position: absolute;
+        right: 0%;
+    }
+
 }
 
 
@@ -360,6 +482,10 @@ input[type="number"]::-webkit-inner-spin-button {
     text-align: center;
 }
 
+#hintTab {
+    font-size: 200%;
+}
+
 #scoreboardTable {
     min-width: 50vw;
     margin: 0 auto;
@@ -368,5 +494,24 @@ input[type="number"]::-webkit-inner-spin-button {
 #divForCanvas {
     overflow: auto;
     width: 80%;
-    height: 80%;
+    height: 90%;
+}
+
+#backToMainMenuButton {
+    display: block;
+    width: 80%;
+    height: 40%;
+    border: 1vw outset darkgray;
+    background-color: lightslategray;
+    font-size: 3vw;
+    padding: 0;
+    margin: 1vw auto 0 auto;
+}
+
+#backToMainMenuButton:hover, #backToMainMenuButton:active {
+    background-color: darkgray;
+}
+
+#backToMainMenuButton:active {
+    border-style: inset;
 }

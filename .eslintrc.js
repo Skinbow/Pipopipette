@@ -65,6 +65,7 @@ module.exports = {
         "Form_MODULE": "writeable",
         "DisplayedMessage_MODULE": "readable",
         "jQuery": "writeable",
-        "$": "readable"
+        "$": "readable",
+        "Scoreboard_MODULE": "writeable"
     }
 };
