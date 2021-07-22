@@ -3,53 +3,10 @@
 [33m[nodemon] watching path(s): *.*[39m
 [33m[nodemon] watching extensions: js,mjs,json[39m
 [32m[nodemon] starting `node server/server.js`[39m
-Listenting on *:3000
-
-The user with the socket id SixoqaejooE9O1X-AAAB connected!
-
-Game with index 4 was successfully created!
-
-The user with the socket id r2f9f78q_-1CaoRxAAAD connected!
-
-Requested game index 1 does not exist!
-
-The user with the socket id v4H1QrmsxTal4Ho7AAAF connected!
-
-There are 2 users connected to game with index 4
-Telling the room 4 that the player with id v4H1QrmsxTal4Ho7AAAF has joined.
-
-User with socket id r2f9f78q_-1CaoRxAAAD disconnected!
-
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
 [32m[nodemon] restarting due to changes...[39m
 [32m[nodemon] starting `node server/server.js`[39m
-Listenting on *:3000
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node server/server.js`[39m
-Listenting on *:3000
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node server/server.js`[39m
-Listenting on *:3000
-
-The user with the socket id 3PRKpsEszg3cz4CcAAAB connected!
-
-Game with index 2 was successfully created!
-
-The user with the socket id zWhN8qOiFMQkUjwJAAAD connected!
-
-There are 2 users connected to game with index 2
-Telling the room 2 that the player with id zWhN8qOiFMQkUjwJAAAD has joined.
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node server/server.js`[39m
-Listenting on *:3000
-
-The user with the socket id UAQQQrI5a8UgmYbRAAAB connected!
-
-Game with index 7 was successfully created!
-
-The user with the socket id opLgKShyoVuVGDnXAAAD connected!
-
-There are 2 users connected to game with index 7
-Telling the room 7 that the player with id opLgKShyoVuVGDnXAAAD has joined.
+Listenting on *:5000
 [32m[nodemon] restarting due to changes...[39m
 [32m[nodemon] starting `node server/server.js`[39m
 Listenting on *:3000
