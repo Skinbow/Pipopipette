@@ -3,6 +3,8 @@ const express = require("express");
 const http = require("http");
 const path = require("path");
 const socket_io = require("socket.io");
+const compression = require("compression");
+const helmet = require("helmet");
 
 const {
     createGame,
@@ -25,11 +27,14 @@ var app = express();
 var server = http.createServer(app);
 var io = socket_io(server);
 
+app.use(helmet());
+app.use(compression());
 app.use(favicon(path.resolve("public", "assets", "favicon.ico")));
+app.use(express.static(path.resolve("public")));
+
 app.get("/", (req, res) => {
     res.sendFile(path.resolve("public", "index.html"));
 });
-app.use(express.static(path.resolve("public")));
 
 function checkIfValidJoin(socket, gameIndex) {
     // Game does not exist

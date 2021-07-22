@@ -3,10 +3,128 @@
 [33m[nodemon] watching path(s): *.*[39m
 [33m[nodemon] watching extensions: js,mjs,json[39m
 [32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+
+The user with the socket id fbSq3BVrOFlDsi9qAAAB connected!
+
+Game with index 9 was successfully created!
+Deleting game with index 9
+
+User with socket id fbSq3BVrOFlDsi9qAAAB disconnected!
+
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
 [31m[nodemon] app crashed - waiting for file changes before starting...[39m
 [32m[nodemon] restarting due to changes...[39m
 [32m[nodemon] starting `node server/server.js`[39m
-Listenting on *:5000
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+
+The user with the socket id ZINbljp7QY5VP01bAAAB connected!
+
+Game with index 0 was successfully created!
+Deleting game with index 0
+
+User with socket id ZINbljp7QY5VP01bAAAB disconnected!
+
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+
+The user with the socket id 7yI71oNfPwwWyVGxAAAB connected!
+
+
+The user with the socket id qMbFF-QWsHNX5BGdAAAD connected!
+
+
+User with socket id 7yI71oNfPwwWyVGxAAAB disconnected!
+
+
+User with socket id qMbFF-QWsHNX5BGdAAAD disconnected!
+
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server/server.js`[39m
+Listenting on *:3000
 [32m[nodemon] restarting due to changes...[39m
 [32m[nodemon] starting `node server/server.js`[39m
 Listenting on *:3000

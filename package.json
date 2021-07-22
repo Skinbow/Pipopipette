@@ -25,7 +25,9 @@
   },
   "homepage": "https://github.com/Skinbow/Pipopipette#readme",
   "dependencies": {
+    "compression": "^1.7.4",
     "express": "^4.17.1",
+    "helmet": "^4.6.0",
     "http": "^0.0.1-security",
     "path": "^0.12.7",
     "serve-favicon": "^2.5.0",
