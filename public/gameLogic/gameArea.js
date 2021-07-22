@@ -49,12 +49,12 @@ Game_MODULE = (function (Game_MODULE) {
             this.context.imageSmoothingEnabled = false;
 
 
-            // Inserting canvas into HTML document
-            document.getElementById("divForCanvas").appendChild(this.canvas);
-
             fillSticks(this);
             fillWallSegments(this);
             fillSquares(this);
+
+            // Inserting canvas into HTML document
+            document.getElementById("divForCanvas").appendChild(this.canvas);
 
             findStickNeighbours(this);
             findSquareNeigbours(this);

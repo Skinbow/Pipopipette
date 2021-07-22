@@ -93,11 +93,10 @@ var Form_MODULE = (function () {
         if (e.key === "Enter")
         {
             e.preventDefault();
-            if (checkIfValidName(formVariables))
+            if (!formVariables.nicknameFormDiv.classList.contains("hidden") && checkIfValidName(formVariables))
             {
                 formVariables.nicknameFormDiv.classList.add("hidden");
                 formVariables.gameFormDiv.classList.remove("hidden");
-                document.onkeydown = null;
             }
         }
     }
@@ -147,7 +146,6 @@ var Form_MODULE = (function () {
             {
                 formVariables.nicknameFormDiv.classList.remove("hidden");
                 formVariables.gameFormDiv.classList.add("hidden");
-                document.onkeydown = keyPress;
             }
         };
 
@@ -155,7 +153,6 @@ var Form_MODULE = (function () {
         {
             formVariables.nicknameFormDiv.classList.remove("hidden");
             formVariables.gameFormDiv.classList.add("hidden");
-            document.onkeydown = keyPress;
         };
     }
 
