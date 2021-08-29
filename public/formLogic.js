@@ -131,7 +131,6 @@ var Form_MODULE = (function () {
 
         // When the form is submitted
         formVariables.submitButton.onclick = function(event) {
-            event.preventDefault();
             if (checkIfValidName(formVariables))
             {
                 if (checkIfValidInput(formVariables))
